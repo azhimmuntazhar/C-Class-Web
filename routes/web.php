@@ -7,7 +7,7 @@ use App\Models\Gallery;   // Import GalleryController
 use Illuminate\Support\Facades\Route;
 
 
-// === PUBLIC ROUTES (Tidak perlu login) ===
+// === PUBLIC ROUTES ===
 Route::get('/', function () {
     // Hitung total gambar di database
     $totalDoksli = Gallery::count();
@@ -56,6 +56,12 @@ Route::middleware('auth')->group(function () {
 // Route ini hanya bisa diakses jika user punya middleware 'isAdmin'
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::delete('/gallery/{gallery}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
+});
+// Admin Routes - Hanya untuk admin
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+    Route::patch('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('users.updateRole');
+    Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
 });
 
 // Route Auth Breeze (Login, Register, Forgot Password, dll)

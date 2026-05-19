@@ -10,11 +10,18 @@ class IsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah user login DAN role-nya admin
-        if (!auth()->check() || !auth()->user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Admin only.');
+        // 1. Pastikan user sudah login
+        if (!auth()->check()) {
+            return redirect()->route('login');
         }
+
+        // 2. Cek role: Izinkan Admin ATAU Manager
+        $allowedRoles = ['admin', 'manager'];
         
+        if (!in_array(auth()->user()->role, $allowedRoles)) {
+            abort(403, 'Akses ditolak. Halaman ini khusus untuk Admin & Manager.');
+        }
+
         return $next($request);
     }
 }
