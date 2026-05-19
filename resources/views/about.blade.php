@@ -115,7 +115,7 @@
             </div>
 
             <p class="text-gray-400 text-lg mx-auto mb-3">
-                <span class="text-emerald-500">❯</span><span class="text-gray-400"> Team Engginer</span>
+                <span class="text-emerald-500">❯</span><span class="text-gray-400"> Team Project</span>
             </p>
             <!-- 👥 Team Members Grid (4 Orang) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
