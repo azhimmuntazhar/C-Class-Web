@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,6 +18,31 @@ class UserController extends Controller
 
         $users = User::latest()->paginate(10);
         return view('admin.users.index', compact('users'));
+    }
+
+    public function store(Request $request)
+    {
+        // Hanya Admin yang boleh create user
+        if (!auth()->check() || auth()->user()->role !== 'admin') {
+            abort(403, 'Akses ditolak. Khusus Admin.');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
+            'role' => 'required|in:user,manager,admin',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'email_verified_at' => now(), // Auto-verify agar bisa langsung login
+        ]);
+
+        return back()->with('success', 'User baru berhasil dibuat! 🎉');
     }
 
     public function updateRole(Request $request, User $user)

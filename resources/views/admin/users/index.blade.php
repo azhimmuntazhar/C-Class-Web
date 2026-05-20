@@ -77,7 +77,20 @@
     <main class="max-w-6xl mx-auto px-4 py-10 w-full">
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-3xl font-bold text-white">User Management</h1>
-            <a href="{{ route('galeri') }}" class="text-sm text-gray-400 hover:text-emerald-400 transition">← Back</a>
+            <div class="flex items-center gap-3">
+                <a href="{{ route('galeri') }}" class="text-sm text-gray-400 hover:text-emerald-400 transition">← Back</a>
+                
+                {{-- Tombol Tambah User (Hanya untuk Admin) --}}
+                @if(auth()->user()->role === 'admin')
+                <button type="button" onclick="openModal()" 
+                        class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition flex items-center gap-2 shadow-md hover:shadow-lg ml-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Tambah User
+                </button>
+                @endif
+            </div>
         </div>
 
         @if(session('success'))
@@ -185,6 +198,87 @@
         </div>
     </main>
 
+    <!-- modal form -->
+    <div id="createUserModal" class="fixed inset-0 z-[60] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
+        
+        <!-- Modal Content -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md mx-4">
+            <div class="bg-gray-800 rounded-2xl border border-gray-700 shadow-2xl overflow-hidden">
+                <!-- Header -->
+                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+                    <h3 class="text-lg font-semibold text-white">Tambah User Baru</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Form -->
+                <form method="POST" action="{{ route('admin.users.store') }}" class="p-6 space-y-4">
+                    @csrf
+                    
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-1">Name</label>
+                        <input type="text" name="name" value="{{ old('name') }}" required
+                            class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition @error('name') border-red-500 @enderror">
+                        @error('name') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-1">Email</label>
+                        <input type="email" name="email" value="{{ old('email') }}" required
+                            class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition @error('email') border-red-500 @enderror">
+                        @error('email') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-1">Password</label>
+                        <input type="password" name="password" required minlength="6"
+                            class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition @error('password') border-red-500 @enderror">
+                        @error('password') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    
+                    <!-- Confirm Password -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-1">Confirm Password</label>
+                        <input type="password" name="password_confirmation" required
+                            class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
+                    </div>
+                    
+                    <!-- Role -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-1">Role</label>
+                        <select name="role" required
+                                class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
+                            <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User</option>
+                            <option value="manager" {{ old('role') === 'manager' ? 'selected' : '' }}>Manager</option>
+                            <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                        </select>
+                        @error('role') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" onclick="closeModal()" 
+                                class="flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition">
+                            Batal
+                        </button>
+                        <button type="submit" 
+                                class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition shadow-md">
+                            Buat User
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
         function confirmDelete(userId) {
@@ -254,6 +348,37 @@
                 background: '#1f2937',
                 color: '#fff'
             });
+        @endif
+
+        //modal logic
+        function openModal() {
+            document.getElementById('createUserModal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); // Prevent scroll behind modal
+        }
+
+        function closeModal() {
+            document.getElementById('createUserModal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Close modal when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Close modal when clicking outside content
+        document.getElementById('createUserModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'createUserModal') closeModal();
+        });
+
+        // Auto-open modal if there are validation errors from server
+        @if ($errors->any() && request()->is('admin/users'))
+            @if (session('success'))
+                // Success: show toast only
+            @else
+                // Errors: open modal to show validation messages
+                document.addEventListener('DOMContentLoaded', openModal);
+            @endif
         @endif
     </script>
 </body>

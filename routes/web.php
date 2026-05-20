@@ -62,6 +62,8 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
     Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
     Route::patch('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('users.updateRole');
     Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+    // admin add akun
+    Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
 });
 
 // Route Auth Breeze (Login, Register, Forgot Password, dll)
