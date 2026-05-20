@@ -128,12 +128,14 @@
                                     $isSelf = $user->id === auth()->id();
                                     $isAdmin = auth()->user()->role === 'admin';
                                     $isManager = auth()->user()->role === 'manager';
-                                    $targetIsUser = $user->role === 'user';
+                                    $basicRoles = config('roles.basic_roles');
+                                    $isKetua = in_array($user->role, $basicRoles);
 
-                                    // Izin Edit: Admin (semua kecuali self) ATAU Manager (hanya ke target User & bukan self)
-                                    $canEdit = !$isSelf && ($isAdmin || ($isManager && $targetIsUser));
-                                    // Izin Hapus: Admin (semua kecuali self) ATAU Manager (hanya ke target User & bukan self)
-                                    $canDelete = !$isSelf && ($isAdmin || ($isManager && $targetIsUser));
+                                    // Izin Edit: Admin (semua kecuali self) ATAU Manager (hanya ke target Ketua & bukan self)
+                                    $canEdit = !$isSelf && ($isAdmin || ($isManager && $isKetua));
+                                    
+                                    // Izin Hapus: Admin (semua kecuali self) ATAU Manager (hanya ke target Ketua & bukan self)
+                                    $canDelete = !$isSelf && ($isAdmin || ($isManager && $isKetua));
                                 @endphp
 
                                 @if($canEdit)
@@ -141,9 +143,16 @@
                                         @csrf @method('PATCH')
                                         <select name="role" onchange="this.form.submit()"
                                                 class="px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-sm text-white focus:ring-2 focus:ring-emerald-500 outline-none transition">
-                                            <option value="user" {{ $user->role === 'user' ? 'selected' : '' }}>User</option>
-                                            <option value="manager" {{ $user->role === 'manager' ? 'selected' : '' }}>Manager</option>
-                                            @if($isAdmin)
+                                            
+                                            @foreach(config('roles.list') as $key => $label)
+                                                <option value="{{ $key }}" {{ $user->role === $key ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+
+                                            {{-- Opsi Admin/Manager hanya untuk Admin --}}
+                                            @if(auth()->user()->role === 'admin')
+                                                <option value="manager" {{ $user->role === 'manager' ? 'selected' : '' }}>Manager</option>
                                                 <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
                                             @endif
                                         </select>
@@ -152,12 +161,12 @@
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border
                                         @if($user->role === 'admin') bg-emerald-900/50 border-emerald-700 text-emerald-300
                                         @elseif($user->role === 'manager') bg-blue-900/50 border-blue-700 text-blue-300
-                                        @else bg-gray-700 border-gray-600 text-gray-300 @endif">
-                                        {{ ucfirst($user->role) }}
-                                        @if($isSelf)
-                                            <span class="text-xs opacity-75">(You)</span>
-                                        @elseif($isManager && !$targetIsUser)
-                                            <span class="text-xs opacity-75">(Protected)</span>
+                                        @else bg-purple-900/30 border-purple-700/50 text-purple-300 @endif">
+                                        
+                                        {{ config('roles.list.' . $user->role) ?? ucfirst($user->role) }}
+                                        
+                                        @if($isSelf) <span class="text-xs opacity-75">(You)</span>
+                                        @elseif($isManager && !$isKetua) <span class="text-xs opacity-75">(Protected)</span>
                                         @endif
                                     </span>
                                 @endif
@@ -253,12 +262,22 @@
                     
                     <!-- Role -->
                     <div>
-                        <label class="block text-gray-300 text-sm mb-1">Role</label>
+                        <label class="block text-gray-300 text-sm mb-1">Role / Divisi</label>
                         <select name="role" required
-                                class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
-                            <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User</option>
-                            <option value="manager" {{ old('role') === 'manager' ? 'selected' : '' }}>Manager</option>
-                            <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                                class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition @error('role') border-red-500 @enderror">
+                            
+                            <!-- Loop 9 Role Ketua dari Config -->
+                            @foreach(config('roles.list') as $key => $label)
+                                <option value="{{ $key }}" {{ old('role') == $key ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+
+                            <!-- Opsi Manager & Admin (Hanya tampil jika login sebagai Admin) -->
+                            @if(auth()->user()->role === 'admin')
+                                <option value="manager" {{ old('role') == 'manager' ? 'selected' : '' }}>Manager</option>
+                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                            @endif
                         </select>
                         @error('role') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
