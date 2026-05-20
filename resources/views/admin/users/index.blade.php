@@ -94,7 +94,7 @@
         <div class="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
-                    <thead class="bg-gray-700 text-gray-300">
+                    <thead class="bg-gray text-emerald-300">
                         <tr>
                             <th class="px-6 py-4 text-left font-medium">ID</th>
                             <th class="px-6 py-4 text-left font-medium">Name</th>
