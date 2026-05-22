@@ -42,115 +42,89 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col">
-            <!-- Header/Navbar untuk tombol toggle (hanya terlihat di layar kecil) -->
-            <header class="bg-white shadow-sm p-4 flex items-center justify-between md:hidden">
-                <button id="sidebarToggle" class="text-gray-800 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
-                <h1 class="text-lg font-semibold">Dashboard Tugas</h1>
-            </header>
-
-            <!-- Overlay untuk mobile (saat sidebar terbuka) -->
-            <div id="sidebarOverlay" class="fixed inset-0 bg-black opacity-50 z-40 hidden md:hidden"></div>
-
-            <!-- Konten Halaman Sebenarnya -->
-            <div class="max-w-6xl mx-auto px-4 py-10 w-full">
-                <div class="text-center text-white">
-                    <h3 class="text-5xl font-bold mb-7 mt-7">Dashboard Tugas</h3>
-                </div>
-
-
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
-                    <div class="p-6">
-
-                        <a href="{{ route('tasks.create') }}"
-                           class="inline-flex items-center justify-center px-4 py-2 rounded-lg
-                                  bg-emerald-600 text-white text-sm font-semibold
-                                  hover:bg-emerald-700 transition mb-4">
-                            ADD TASK
-                        </a>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
-                                <thead class="bg-gray-50 text-gray-700">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left font-semibold border-b">IMAGE</th>
-                                        <th class="px-4 py-3 text-left font-semibold border-b">TITLE</th>
-                                        <th class="px-4 py-3 text-left font-semibold border-b">DESCRIPTION</th>
-                                        <th class="px-4 py-3 text-left font-semibold border-b w-[220px]">ACTIONS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($tasks as $task)
-                                        <tr class="border-b last:border-b-0">
-                                            <td class="px-4 py-3">
-                                                <div class="flex justify-center">
-                                                    <img
-                                                        src="{{ asset('/storage/tasks/'.$task->image) }}"
-                                                        class="w-32 h-32 object-cover rounded-lg border border-gray-200"
-                                                        alt="{{ $task->title }}"
-                                                    >
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 font-medium text-gray-900">
-                                                {{ $task->title }}
-                                            </td>
-                                            <td class="px-4 py-3">
-                                                {{ Str::limit(strip_tags($task->description), 40) }}
-                                            </td>
-                                            <td class="px-4 py-3">
-                                                <form
-                                                    action="{{ route('tasks.destroy', $task->id) }}"
-                                                    method="POST"
-                                                    class="delete-form flex items-center gap-2"
-                                                >
-                                                    <a href="{{ route('tasks.show', $task->id) }}"
-                                                       class="px-3 py-2 rounded-lg bg-gray-900 text-white
-                                                              text-xs font-semibold hover:bg-gray-800 transition">
-                                                        SHOW
-                                                    </a>
-
-                                                    <a href="{{ route('tasks.edit', $task->id) }}"
-                                                       class="px-3 py-2 rounded-lg bg-blue-600 text-white
-                                                              text-xs font-semibold hover:bg-blue-700 transition">
-                                                        EDIT
-                                                    </a>
-
-                                                    @csrf
-                                                    @method('DELETE')
-
-                                                    <button type="submit"
-                                                        class="px-3 py-2 rounded-lg bg-red-600 text-white
-                                                               text-xs font-semibold hover:bg-red-700 transition">
-                                                        HAPUS
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="px-4 py-6">
-                                                <div class="bg-red-50 border border-red-200 text-red-700
-                                                            rounded-lg px-4 py-3">
-                                                    Data Tugas belum ada.
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="mt-4">
-                            {{ $tasks->links() }}
-                        </div>
-
-                    </div>
-                </div>
+        <div class="max-w-6xl mx-auto px-4 py-10">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-bold text-white">Daftar Tugas</h1>
+                <a href="{{ route('tasks.create') }}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Tugas Baru
+                </a>
             </div>
+
+            @if($tasks->isEmpty())
+                <div class="text-center py-12 bg-gray-800 rounded-2xl border border-gray-700">
+                    <p class="text-gray-400">Belum ada tugas untuk ditampilkan.</p>
+                </div>
+            @else
+                <div class="space-y-4">
+                    @foreach($tasks as $task)
+                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-5 hover:border-emerald-500/30 transition group">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <span class="inline-block px-2.5 py-1 bg-purple-900/40 text-purple-300 text-xs rounded-md font-medium mb-2">
+                                    {{ $task->course_name }}
+                                </span>
+                                <h3 class="text-lg font-semibold text-white group-hover:text-emerald-400 transition">{{ $task->title }}</h3>
+                                <p class="text-gray-400 text-sm mt-1">{{ Str::limit($task->description, 120) }}</p>
+                            </div>
+                            
+                            {{-- 🔥 AUTO STATUS BADGE --}}
+                            @if($task->is_expired)
+                                <span class="px-3 py-1.5 bg-red-900/30 text-red-400 text-xs font-medium rounded-full border border-red-800/50 flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Deadline Lewat
+                                </span>
+                            @else
+                                <span class="px-3 py-1.5 bg-emerald-900/30 text-emerald-400 text-xs font-medium rounded-full border border-emerald-800/50 flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Aktif
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-400 mt-4 pt-4 border-t border-gray-700">
+                            <span>📅 Mulai: <strong class="text-gray-300">{{ $task->starts_at->format('d M Y, H:i') }}</strong></span>
+                            <span>⏰ Deadline: <strong class="text-gray-300">{{ $task->deadline_at->format('d M Y, H:i') }}</strong></span>
+                            <span>👤 Oleh: <strong class="text-gray-300">{{ $task->user->name }}</strong></span>
+                            <span>📋 {{ ucfirst($task->category) }}</span>
+                        </div>
+
+                        @if($task->material_link || $task->submission_link)
+                        <div class="mt-4 flex flex-wrap gap-4">
+                            @if($task->material_link)
+                                <a href="{{ $task->material_link }}" target="_blank" class="text-xs text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                    Materi
+                                </a>
+                            @endif
+                            @if($task->submission_link)
+                                <a href="{{ $task->submission_link }}" target="_blank" class="text-xs text-emerald-400 hover:text-emerald-300 hover:underline flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                    Kumpul
+                                </a>
+                            @endif
+                        </div>
+                        @endif
+
+                        {{-- Tombol Hapus (Owner/Admin/Manager) --}}
+                        @if(auth()->id() === $task->user_id || in_array(auth()->user()->role, ['admin', 'manager']))
+                        <div class="mt-4 pt-3 border-t border-gray-700">
+                            <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="inline" onsubmit="return confirm('Hapus tugas ini?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="text-xs text-red-400 hover:text-red-300 transition">🗑️ Hapus</button>
+                            </form>
+                        </div>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-6">
+                    {{ $tasks->links() }}
+                </div>
+            @endif
         </div>
-    </div>
 
     <!-- SweetAlert Script -->
     <script>

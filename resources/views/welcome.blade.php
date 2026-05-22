@@ -122,7 +122,7 @@
         <div class="max-w-6xl mx-auto px-4 py-10 w-full">
             
             <!-- Welcome Section -->
-            <div class="text-center mb-12">
+            <div class="text-center mb-12 mt-20">
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
                     Welcome to <span class="text-emerald-500">Class C</span>
                 </h1>
@@ -131,14 +131,15 @@
                 </p>
             </div>
 
-            <!-- Stats Cards (Contoh Konten) -->
+            <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
                     <div class="text-emerald-500 mb-2">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                     </div>
-                    <h3 class="text-white font-semibold text-lg">Total Tugas</h3>
-                    <p class="text-3xl font-bold text-white mt-1">128</p>
+                    <h3 class="text-white font-semibold text-lg">Total Tugas Aktif</h3>
+                    <p class="text-3xl font-bold text-white mt-1">{{ $totalActiveTasks ?? 0 }}</p>
+                    <p class="text-xs text-gray-500 mt-1">Dari total {{ \App\Models\Task::count() ?? 0 }} tugas</p>
                 </div>
                 <div onClick="window.location.href='{{ route('galeri') }}'" class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
                     <div class="text-blue-500 mb-2">
@@ -157,11 +158,96 @@
             </div>
 
             <!-- Content Box -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">Aktivitas Terbaru</h2>
-                <div class="text-gray-500">
-                    <p>Konten dashboard akan muncul di sini...</p>
+            <div class="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-white">Aktivitas Terbaru</h2>
+                    <a href="{{ route('tasks.public') }}" class="text-sm text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">
+                        Lihat Semua
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </a>
                 </div>
+
+                @if(isset($latestTasks) && $latestTasks->count() > 0)
+                    <div class="space-y-4">
+                        @forelse($latestTasks as $task)
+                        <div class="bg-gray-800/60 rounded-xl border border-gray-700 p-5 hover:border-emerald-500/40 hover:bg-gray-800 transition group">
+                            
+                            <!-- Paling Atas -->
+                            <div class="flex items-center gap-2 mb-3 flex-wrap">
+                                <!-- MATA KULIAH -->
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-900/30 text-emerald-400 text-xs font-medium rounded-md border border-emerald-800/30">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                    {{ $task->course_name }}
+                                </span>
+
+                                <!-- KATEGORI TUGAS (Sebelah Kanan) -->
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 {{ $task->category === 'kelompok' ? 'bg-blue-900/30 text-blue-400 border-blue-800/30' : 'bg-purple-900/30 text-purple-400 border-purple-800/30' }} text-xs font-medium rounded-md border">
+                                    @if($task->category === 'kelompok')
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    @else
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    @endif
+                                    {{ ucfirst($task->category) }}
+                                </span>
+                            </div>
+
+                            <!-- JUDUL TUGAS -->
+                            <h4 class="text-white font-semibold text-lg mb-2 group-hover:text-emerald-400 transition-colors">
+                                {{ $task->title }}
+                            </h4>
+
+                            <!-- DESKRIPSI TUGAS -->
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2 leading-relaxed">
+                                    {!! Str::limit(strip_tags($task->description), 80) !!}
+                            </p>
+
+                            <!-- FOOTER: Pembuat (Kiri) & Deadline (Kanan) -->
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-700/50">
+                                
+                                <!-- PEMBUAT TUGAS (Sebelah Kiri) -->
+                                <span class="flex items-center gap-2 text-xs text-gray-400">
+                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    
+                                    <span>{{ $task->user->name ?? 'Unknown' }}</span>
+                                    
+                                    <!-- Separator -->
+                                    <span class="w-1 h-1 rounded-full bg-gray-600"></span>
+                                    
+                                    <!-- Role Name (Kanan) -->
+                                    <span class="text-emerald-400/90 font-medium">
+                                        {{ config('roles.list.' . ($task->user->role ?? 'user')) ?? ucfirst($task->user->role ?? 'user') }}
+                                    </span>
+                                </span>
+
+                                <!--  DEADLINE (Paling Kanan) -->
+                                <span class="flex items-center gap-2 text-xs font-medium {{ $task->is_expired ? 'text-red-400' : 'text-emerald-400' }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ $task->deadline_at->format('l, d M H:i') }}
+                                </span>
+                            </div>
+                        </div>
+                        @empty
+                            <!-- Empty State -->
+                            <div class="text-center py-12 bg-gray-800/30 rounded-xl border border-dashed border-gray-700">
+                                <svg class="w-12 h-12 mx-auto text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                                <p class="text-gray-500 text-sm">Belum ada tugas yang dimasukkan.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                @else
+                    {{-- Empty State --}}
+                    <div class="text-center py-10">
+                        <svg class="w-16 h-16 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                        </svg>
+                        <p class="text-gray-400 text-sm">Belum ada tugas yang dimasukkan.</p>
+                        @auth
+                            <a href="{{ route('tasks.create') }}" class="inline-block mt-3 text-emerald-400 hover:text-emerald-300 text-sm font-medium transition">
+                                + Tambah tugas pertama →
+                            </a>
+                        @endauth
+                    </div>
+                @endif
             </div>
 
         </div>
@@ -229,6 +315,27 @@
                 color: '#fff'
             });
         @endif
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const targetEl = document.querySelector('.bg-gray-800 .text-3xl'); // Sesuaikan selector
+            if (targetEl) {
+                const finalValue = {{ $totalActiveTasks ?? 0 }};
+                let current = 0;
+                const increment = Math.ceil(finalValue / 20);
+                
+                const animate = () => {
+                    current += increment;
+                    if (current >= finalValue) {
+                        targetEl.textContent = finalValue;
+                    } else {
+                        targetEl.textContent = current;
+                        requestAnimationFrame(animate);
+                    }
+                };
+                
+                if (finalValue > 0) animate();
+            }
+        });
     </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Add New Task</title>
+    <title>Tugas Baru</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -36,55 +36,97 @@
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col">
-            <header class="bg-white shadow-sm p-4 flex items-center justify-between md:hidden">
-                <button id="sidebarToggle" class="text-gray-800 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
-                <h1 class="text-lg font-semibold">Tambah Tugas</h1>
-            </header>
+<div class="max-w-3xl mx-auto px-4 py-10">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-white">Buat Tugas Baru</h1>
+        <a href="{{ route('tasks.index') }}" class="text-sm text-gray-400 hover:text-emerald-400 transition">← Kembali</a>
+    </div>
 
-            <div id="sidebarOverlay" class="fixed inset-0 bg-black opacity-50 z-40 hidden md:hidden"></div>
+    <form action="{{ route('tasks.store') }}" method="POST" class="bg-gray-800 p-6 rounded-2xl border border-gray-700 space-y-5">
+        @csrf
 
-            <div class="max-w-6xl mx-auto px-4 py-10 w-full">
-                <div class="text-center text-white">
-                    <h3 class="text-5xl font-bold mb-4 mt-7">Dashboard Tugas Kelas</h3>
-                    <h5 class="text-lg mb-6">Ketua kelas yang baik adalah ketua kelas yang melaksanakan tanggung jawabnya sepenuhnya</h5>
-                </div>
+        <!-- Mata Kuliah -->
+        <div>
+            <label class="block text-gray-300 mb-1 text-sm font-medium">Mata Kuliah</label>
+            @if(in_array(auth()->user()->role, ['admin', 'manager']))
+                <select name="course_key" required class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
+                    @foreach(config('roles.courses') as $key => $name)
+                        <option value="{{ $key }}" {{ old('course_key') == $key ? 'selected' : '' }}>{{ $name }}</option>
+                    @endforeach
+                </select>
+            @else
+                @php $courseKey = config("roles.course_mapping." . auth()->user()->role); @endphp
+                <input type="hidden" name="course_key" value="{{ $courseKey }}">
+                <input type="text" value="{{ config('roles.courses.' . $courseKey) }}" disabled 
+                       class="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-300 cursor-not-allowed">
+                <p class="text-xs text-gray-500 mt-1">*Otomatis terisi sesuai divisi Anda</p>
+            @endif
+            @error('course_key') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+        </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h4 class="text-lg font-semibold text-gray-900">Tambah Task</h4>
-                            <a href="{{ route('tasks.index') }}" class="px-4 py-2 rounded-lg bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition">BACK</a>
-                        </div>
-
-                        <form action="{{ route('tasks.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
-                            @csrf
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">IMAGE</label>
-                                <input type="file" name="image" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-900 file:text-white hover:file:bg-gray-800 border border-gray-200 rounded-lg bg-white">
-                                @error('image') <div class="mt-2 text-sm text-red-600">{{ $message }}</div> @enderror
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">TITLE</label>
-                                <input type="text" name="title" value="{{ old('title') }}" placeholder="Masukkan Title Task" class="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-200">
-                                @error('title') <div class="mt-2 text-sm text-red-600">{{ $message }}</div> @enderror
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">DESCRIPTION</label>
-                                <textarea name="description" id="description" rows="6" class="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-200" placeholder="Masukkan Description Task">{{ old('description') }}</textarea>
-                                @error('description') <div class="mt-2 text-sm text-red-600">{{ $message }}</div> @enderror
-                            </div>
-                            <div class="flex justify-end">
-                                <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition">SAVE</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+        <!-- Judul & Kategori -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-300 mb-1 text-sm font-medium">Judul Tugas</label>
+                <input type="text" name="title" value="{{ old('title') }}" required 
+                       class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none">
+                @error('title') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block text-gray-300 mb-1 text-sm font-medium">Kategori</label>
+                <select name="category" required class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <option value="individu" {{ old('category') == 'individu' ? 'selected' : '' }}>Individu</option>
+                    <option value="kelompok" {{ old('category') == 'kelompok' ? 'selected' : '' }}>Kelompok</option>
+                </select>
+                @error('category') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
-    </div>
+
+        <!-- Deskripsi -->
+        <div>
+            <label class="block text-gray-300 mb-1 text-sm font-medium">Deskripsi Tugas</label>
+            <textarea name="description" rows="4" required class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none">{{ old('description') }}</textarea>
+            @error('description') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+        </div>
+
+        <!-- Link -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-300 mb-1 text-sm font-medium">Link Materi (Opsional)</label>
+                <input type="url" name="material_link" value="{{ old('material_link') }}" placeholder="https://..." 
+                       class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none">
+                @error('material_link') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block text-gray-300 mb-1 text-sm font-medium">Link Pengumpulan (Opsional)</label>
+                <input type="url" name="submission_link" value="{{ old('submission_link') }}" placeholder="https://..." 
+                       class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none">
+                @error('submission_link') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
+        <!-- Waktu -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-300 mb-1 text-sm font-medium">Mulai Tugas</label>
+                <input type="datetime-local" name="starts_at" value="{{ old('starts_at') }}" required 
+                       class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none">
+                @error('starts_at') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block text-gray-300 mb-1 text-sm font-medium">Deadline</label>
+                <input type="datetime-local" name="deadline_at" value="{{ old('deadline_at') }}" required 
+                       class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none">
+                @error('deadline_at') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+            <a href="{{ route('tasks.index') }}" class="flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition text-center font-medium">Batal</a>
+            <button type="submit" class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition shadow-md hover:shadow-lg">Simpan Tugas</button>
+        </div>
+    </form>
+</div>
 
     <script>
         CKEDITOR.replace('description');

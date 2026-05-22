@@ -2,174 +2,105 @@
 
 namespace App\Http\Controllers;
 
-//import model task
 use App\Models\Task;
-
-//import return type View
-use Illuminate\View\View;
-
-//import return type redirectResponse
-use Illuminate\Http\RedirectResponse;
-
-//import Http Request
 use Illuminate\Http\Request;
-
-//import Facades Storage
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * index
-     *
-     * @return View
-     */
-    public function index() : View
+    public function index()
     {
-        //get all tasks
-        $tasks = Task::latest()->paginate(10);
+        $user = Auth::user();
+        $query = Task::with('user')->latest();
 
-        //render view with tasks
+        // Filter berdasarkan role
+        if ($user->role === 'admin' || $user->role === 'manager') {
+            $tasks = $query->paginate(10);
+        } else {
+            // Ketua hanya lihat tugas divisinya
+            $courseKey = config("roles.course_mapping.{$user->role}");
+            $tasks = $query->where('course_key', $courseKey)->paginate(10);
+        }
+
         return view('task.index', compact('tasks'));
     }
 
-    /**
-     * create
-     *
-     * @return View
-     */
-    public function create(): View
+    public function publicIndex(Request $request)
     {
-        return view('task.create');
-    }
+        $status = $request->query('status', 'active'); // Default: aktif
+        $query = Task::with('user')->latest();
 
-    /**
-     * store
-     *
-     * @param  mixed $request
-     * @return RedirectResponse
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        //validate form
-        $request->validate([
-            'image'         => 'required|image|mimes:jpeg,jpg,png|max:2048',
-            'title'         => 'required|min:5',
-            'description'   => 'required|min:10',
-        ]);
-
-        //upload image
-        $image = $request->file('image');
-        $image->storeAs('tasks', $image->hashName(), 'public');
-
-        //create task
-        Task::create([
-            'image'         => $image->hashName(),
-            'title'         => $request->title,
-            'description'   => $request->description
-        ]);
-
-        //redirect to index
-        return redirect()->route('tasks.index')->with(['success' => 'Data Berhasil Disimpan!']);
-    }
-    
-    /**
-     * show
-     *
-     * @param  mixed $id
-     * @return View
-     */
-    public function show(string $id): View
-    {
-        //get task by ID
-        $task = Task::findOrFail($id);
-
-        //render view with task
-        return view('task.show', compact('task'));
-    }
-
-    /**
-     * edit
-     *
-     * @param  mixed $id
-     * @return View
-     */
-    public function edit(string $id): View
-    {
-        //get product by ID
-        $task = Task::findOrFail($id);
-
-        //render view with product
-        return view('task.edit', compact('task'));
-    }
-
-    /**
-     * update
-     *
-     * @param  mixed $request
-     * @param  mixed $id
-     * @return RedirectResponse
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //validate form
-        $request->validate([
-            'image'         => 'image|mimes:jpeg,jpg,png|max:2048',
-            'title'         => 'required|min:5',
-            'description'   => 'required|min:10'
-        ]);
-
-        //get task by ID
-        $task = Task::findOrFail($id);
-
-        //check if image is uploaded
-        if ($request->hasFile('image')) {
-
-            //hapus gambar lama
-            Storage::disk('public')->delete('tasks/'.$task->image);
-
-            //upload gambar baru
-            $image = $request->file('image');
-            $image->storeAs('tasks', $image->hashName(), 'public');
-
-            //update product with new image
-            $task->update([
-                'image'         => $image->hashName(),
-                'title'         => $request->title,
-                'description'   => $request->description
-            ]);
-
+        // Filter berdasarkan status deadline
+        if ($status === 'expired') {
+            $query->where('deadline_at', '<=', now());
         } else {
-
-            //update product without image
-            $task->update([
-                'title'         => $request->title,
-                'description'   => $request->description
-            ]);
+            $query->where('deadline_at', '>', now());
         }
 
-        //redirect to index
-        return redirect()->route('tasks.index')->with(['success' => 'Data Berhasil Diubah!']);
+        $tasks = $query->get();
+        return view('tasks.public', compact('tasks', 'status'));
     }
-    
-    /**
-     * destroy
-     *
-     * @param  mixed $id
-     * @return RedirectResponse
-     */
-    public function destroy($id): RedirectResponse
+
+    public function create()
     {
-        //get task by ID
-        $task = Task::findOrFail($id);
+        $user = Auth::user();
+        $courses = config('roles.courses');
+        $allowedCourseKey = null;
 
-        //delete image
-        Storage::disk('public')->delete('tasks/'.$task->image);
+        if ($user->role === 'admin' || $user->role === 'manager') {
+            // Admin/Manager bisa pilih semua course
+        } else {
+            // Ketua hanya bisa input untuk course bagiannya
+            $allowedCourseKey = config("roles.course_mapping.{$user->role}");
+        }
 
-        //delete task
+        return view('task.create', compact('courses', 'allowedCourseKey'));
+    }
+
+    public function store(Request $request)
+    {
+        $user = Auth::user();
+        $courseKey = $request->course_key;
+
+        // VALIDASI PERMISSION: Ketua tidak boleh input course lain
+        if (!in_array($user->role, ['admin', 'manager'])) {
+            $allowedCourse = config("roles.course_mapping.{$user->role}");
+            if ($courseKey !== $allowedCourse) {
+                return back()->withInput()->withErrors([
+                    'course_key' => 'Anda tidak memiliki akses untuk mata kuliah ini.'
+                ]);
+            }
+        }
+
+        $validated = $request->validate([
+            'course_key'      => 'required|string',
+            'title'           => 'required|string|max:255',
+            'description'     => 'required|string',
+            'category'        => 'required|in:individu,kelompok',
+            'material_link'   => 'nullable|url',
+            'submission_link' => 'nullable|url',
+            'starts_at'       => 'required|date|before:deadline_at',
+            'deadline_at'     => 'required|date|after:starts_at',
+        ]);
+
+        $validated['user_id'] = $user->id;
+        Task::create($validated);
+
+        $courseName = config("roles.courses.{$courseKey}") ?? $courseKey;
+        return redirect()->route('tasks.index')->with('success', "Tugas {$courseName} berhasil dibuat! 🎉");
+    }
+
+    // Optional: destroy method jika perlu hapus tugas
+    public function destroy(Task $task)
+    {
+        $user = Auth::user();
+        
+        // Hanya owner atau admin/manager yang bisa hapus
+        if ($task->user_id !== $user->id && !in_array($user->role, ['admin', 'manager'])) {
+            abort(403, 'Akses ditolak.');
+        }
+        
         $task->delete();
-
-        //redirect to index
-        return redirect()->route('tasks.index')->with(['success' => 'Data Berhasil Dihapus!']);
+        return back()->with('success', 'Tugas berhasil dihapus!');
     }
 }

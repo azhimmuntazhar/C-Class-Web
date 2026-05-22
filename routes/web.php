@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TaskController;      // 1. Import TaskController
+use App\Models\Task;  // Import Task model
+use App\Http\Controllers\TaskController;      // Import TaskController
 use App\Http\Controllers\GalleryController;
 use App\Models\Gallery;   // Import GalleryController
 use Illuminate\Support\Facades\Route;
@@ -11,8 +12,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     // Hitung total gambar di database
     $totalDoksli = Gallery::count();
+    // Hitung total tugas yang belum expired
+    $totalActiveTasks = Task::where('deadline_at', '>', now())->count();
+    //5 tugas terbaru
+    $latestTasks = Task::with('user')
+        ->latest()
+        ->limit(5)
+        ->get();
     
-    return view('welcome', compact('totalDoksli'));
+    return view('welcome', compact('totalDoksli', 'totalActiveTasks', 'latestTasks'));
 })->name('home');
 Route::get('/galeri', function () {
     $galleries = \App\Models\Gallery::latest()->get();
@@ -30,6 +38,9 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
+//public route untuk tugas
+Route::get('/tugas', [\App\Http\Controllers\TaskController::class, 'publicIndex'])->name('tasks.public');
+
 // UPDATE 1: Redirect dashboard ke tasks.index agar lebih berguna
 Route::get('/dashboard', function () {
     return redirect()->route('tasks.index');
@@ -40,7 +51,8 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     // 2. ROUTE TASKS (CRUD Lengkap)
-    Route::resource('tasks', TaskController::class)->names('tasks');
+    Route::resource('tasks', \App\Http\Controllers\TaskController::class)
+        ->only(['index', 'create', 'store', 'destroy']);
 
     Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.doksli');
     Route::get('/gallery/create', [GalleryController::class, 'create'])->name('gallery.createdoksli');
