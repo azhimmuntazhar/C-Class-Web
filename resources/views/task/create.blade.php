@@ -9,8 +9,6 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- CKEditor (opsional, untuk rich text description) -->
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 </head>
 </head>
 <body class="bg-gray-700">
@@ -85,8 +83,16 @@
         <!-- Deskripsi -->
         <div>
             <label class="block text-gray-300 mb-1 text-sm font-medium">Deskripsi Tugas</label>
-            <textarea name="description" rows="4" required class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none">{{ old('description') }}</textarea>
-            @error('description') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+            <textarea 
+                name="description" 
+                rows="5" 
+                required 
+                class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                placeholder="Masukkan deskripsi tugas di sini...&#10;&#10;">{{ old('description') }}</textarea>
+            @error('description') 
+                <p class="text-red-400 text-xs mt-1">{{ $message }}</p> 
+            @enderror
+            <p class="text-xs text-gray-500 mt-1">Tekan Enter untuk membuat paragraf baru</p>
         </div>
 
         <!-- Link -->
@@ -129,7 +135,6 @@
 </div>
 
     <script>
-        CKEDITOR.replace('description');
 
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
