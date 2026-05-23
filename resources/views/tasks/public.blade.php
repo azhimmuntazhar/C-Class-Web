@@ -124,6 +124,22 @@
                     {!! Str::limit(strip_tags($task->description), 80) !!}
                 </p>
 
+                <!-- External Links (Read-only) -->
+                @if($task->material_link || $task->submission_link)
+                <div class="mt-3 flex gap-4 mb-3">
+                    @if($task->material_link)
+                        <a href="{{ $task->material_link }}" target="_blank" class="text-xs text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1">
+                            📖 Lihat Materi
+                        </a>
+                    @endif
+                    @if($task->submission_link)
+                        <a href="{{ $task->submission_link }}" target="_blank" class="text-xs text-emerald-400 hover:text-emerald-300 hover:underline flex items-center gap-1">
+                            📤 Link Pengumpulan
+                        </a>
+                    @endif
+                </div>
+                @endif
+
                 <!-- Footer: User+Role | Deadline | Links -->
                 <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-700/50 text-xs text-gray-400">
                     
@@ -142,22 +158,6 @@
                         {{ $task->deadline_at->format('d M Y, H:i') }}
                     </span>
                 </div>
-
-                <!-- External Links (Read-only) -->
-                @if($task->material_link || $task->submission_link)
-                <div class="mt-3 flex gap-4">
-                    @if($task->material_link)
-                        <a href="{{ $task->material_link }}" target="_blank" class="text-xs text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1">
-                            📖 Lihat Materi
-                        </a>
-                    @endif
-                    @if($task->submission_link)
-                        <a href="{{ $task->submission_link }}" target="_blank" class="text-xs text-emerald-400 hover:text-emerald-300 hover:underline flex items-center gap-1">
-                            📤 Link Pengumpulan
-                        </a>
-                    @endif
-                </div>
-                @endif
             </div>
             @empty
                 <!-- Empty State -->
