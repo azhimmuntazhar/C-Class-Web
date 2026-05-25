@@ -13,6 +13,41 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
+        /* Global Scrollbar*/
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(31, 41, 55, 0.4); /* Match bg-gray-800/900 */
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.8); /* gray-600 + opacity */
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 1); /* gray-500 */
+        }
+
+        /*  Firefox Support (Optional tapi disarankan) */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(75, 85, 99, 0.8) rgba(31, 41, 55, 0.4);
+        }
+
+        /* Smooth scroll & navbar padding (tetap pertahankan) */
+        html { scroll-behavior: smooth; }
+        body { padding-top: 72px; }
+
+        /* Animasi Underline (tetap pertahankan) */
+        .nav-underline { position: relative; display: inline-block; }
+        .nav-underline::after {
+            content: ''; position: absolute; left: 0; bottom: -3px; width: 100%; height: 4px;
+            background-color: #10b981; border-radius: 9999px; transform: scaleX(0);
+            transform-origin: right; transition: transform 0.3s ease-in-out;
+        }
+        .nav-underline:hover::after { transform: scaleX(1); transform-origin: left; }
         /* Smooth scroll untuk anchor links */
         html { scroll-behavior: smooth; }
         /* Mencegah konten tertutup navbar fixed */
@@ -59,6 +94,34 @@
         }
         .animate-marquee:hover {
             animation-play-state: paused;
+        }
+        /* Custom scrollbar untuk modal */
+        #taskModal ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #taskModal ::-webkit-scrollbar-track {
+            background: rgba(55, 65, 81, 0.3);
+            border-radius: 3px;
+        }
+
+        #taskModal ::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.8);
+            border-radius: 3px;
+        }
+
+        #taskModal ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 1);
+        }
+
+        /* Prevent body scroll when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* iOS smooth scrolling */
+        #taskModal .overflow-y-auto {
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
@@ -128,7 +191,7 @@
             
             <!-- Welcome Section -->
             <div class="text-center mb-12 mt-20">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">
                     Welcome to <span class="text-emerald-500">Class C</span>
                 </h1>
                 <p class="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -195,7 +258,7 @@
                 @if(isset($latestTasks) && $latestTasks->count() > 0)
                     <div class="space-y-4">
                         @forelse($latestTasks as $task)
-                        <div class="bg-gray-800/60 rounded-xl border border-gray-700 p-5 hover:border-emerald-500/40 hover:bg-gray-800 transition group">
+                        <div onclick="openTaskModal({{ $task->id }})" class="bg-gray-800/60 rounded-xl border border-gray-700 p-5 hover:border-emerald-500/40 hover:bg-gray-800 transition group">
                             
                             <!-- Paling Atas -->
                             <div class="flex items-center gap-2 mb-3 flex-wrap">
@@ -298,6 +361,91 @@
             </p>
         </div>
     </footer>
+    <!-- TASK DETAIL MODAL -->
+    <div id="taskModal" class="fixed inset-0 z-[70] hidden flex items-end sm:items-center justify-center">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="closeTaskModal()"></div>
+
+        <!-- Modal Content -->
+        <div class="relative w-full sm:max-w-2xl mx-0 sm:mx-4 bg-gray-800 sm:rounded-2xl rounded-t-2xl border-0 sm:border border-gray-700 shadow-2xl flex flex-col overflow-hidden max-h-[90vh] sm:max-h-[85vh] opacity-0 translate-y-full sm:translate-y-4 sm:scale-95 transition-all duration-300 ease-out will-change-transform,opacity">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-700 bg-gray-800 flex-shrink-0">
+                <h3 class="text-lg font-bold text-white">Detail Tugas</h3>
+                <button onclick="closeTaskModal()" class="text-gray-400 hover:text-white transition p-2 hover:bg-gray-700 rounded-lg -mr-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Body (Scrollable) -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+                <!-- Status & Course -->
+                <div class="flex flex-wrap gap-2">
+                    <span id="modalStatus" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border"></span>
+                    <span id="modalCourse" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-900/30 text-emerald-400 text-sm font-medium rounded-lg border border-emerald-800/30"></span>
+                </div>
+
+                <!-- Title -->
+                <h2 id="modalTitle" class="text-xl font-bold text-white leading-tight"></h2>
+
+                <!-- Category -->
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-400 text-sm">Kategori:</span>
+                    <span id="modalCategory" class="px-2.5 py-1 rounded-md text-xs font-medium border"></span>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                        Deskripsi Tugas
+                    </h4>
+                    <div id="modalDescription" class="bg-gray-700/50 rounded-lg p-4 text-gray-300 text-sm leading-relaxed border border-gray-600 max-h-48 overflow-y-auto"></div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="space-y-3">
+                    <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600">
+                        <div class="flex items-center gap-2 text-gray-400 text-xs mb-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Mulai
+                        </div>
+                        <p id="modalStarts" class="text-white text-sm font-medium"></p>
+                    </div>
+                    <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600">
+                        <div class="flex items-center gap-2 text-gray-400 text-xs mb-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Deadline
+                        </div>
+                        <p id="modalDeadline" class="text-white text-sm font-medium"></p>
+                    </div>
+                </div>
+
+                <!-- Creator Info -->
+                <div class="flex items-center gap-3 p-3 bg-gray-700/30 rounded-lg border border-gray-600">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                        <span id="modalCreatorInitial"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-white text-sm font-medium truncate" id="modalCreator"></p>
+                        <p class="text-gray-400 text-xs truncate" id="modalRole"></p>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div id="modalLinks" class="space-y-2">
+                    <h4 class="text-sm font-semibold text-gray-300 mb-2">Link Terkait</h4>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="border-t border-gray-700 bg-gray-800 p-4 flex-shrink-0">
+                <button onclick="closeTaskModal()" class="w-full px-5 py-3 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
     <!-- ⚙️ SCRIPTS -->
     <script>
         // Mobile Menu Toggle Logic
@@ -361,6 +509,78 @@
                 if (finalValue > 0) animate();
             }
         });
+        // 🔹 Task Modal Functions
+        const tasksData = @json($latestTasks);
+
+        function openTaskModal(taskId) {
+            const task = tasksData.find(t => t.id === taskId);
+            if (!task) return;
+
+            // 🔹 Populate Data (sama seperti sebelumnya)
+            document.getElementById('modalTitle').textContent = task.title;
+            document.getElementById('modalDescription').innerHTML = task.description.replace(/\n/g, '<br>');
+            document.getElementById('modalCourse').innerHTML = `📚 ${task.course_name}`;
+            document.getElementById('modalStarts').textContent = new Date(task.starts_at).toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            document.getElementById('modalDeadline').textContent = new Date(task.deadline_at).toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            document.getElementById('modalCreator').textContent = task.user.name || 'Unknown';
+            document.getElementById('modalCreatorInitial').textContent = (task.user.name || 'U').charAt(0).toUpperCase();
+            document.getElementById('modalRole').textContent = window.configRoles?.[task.user.role] || task.user.role.charAt(0).toUpperCase() + task.user.role.slice(1);
+
+            const isExpired = new Date(task.deadline_at) < new Date();
+            const statusEl = document.getElementById('modalStatus');
+            statusEl.className = `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border ${isExpired ? 'bg-red-900/30 text-red-400 border-red-800/30' : 'bg-emerald-900/30 text-emerald-400 border-emerald-800/30'}`;
+            statusEl.innerHTML = isExpired ? '⏳ Deadline Lewat' : '✅ Aktif';
+
+            const categoryEl = document.getElementById('modalCategory');
+            categoryEl.className = `px-2.5 py-1 rounded-md text-xs font-medium border ${task.category === 'kelompok' ? 'bg-blue-900/30 text-blue-400 border-blue-800/30' : 'bg-purple-900/30 text-purple-400 border-purple-800/30'}`;
+            categoryEl.innerHTML = task.category === 'kelompok' ? '👥 Kelompok' : '👤 Individu';
+
+            const linksContainer = document.getElementById('modalLinks');
+            linksContainer.innerHTML = '<h4 class="text-sm font-semibold text-gray-300 mb-2">Link Terkait</h4>';
+            if (task.material_link) linksContainer.innerHTML += `<a href="${task.material_link}" target="_blank" class="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm transition p-2 rounded-lg hover:bg-blue-900/20"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>Materi Pembelajaran</a>`;
+            if (task.submission_link) linksContainer.innerHTML += `<a href="${task.submission_link}" target="_blank" class="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-sm transition p-2 rounded-lg hover:bg-emerald-900/20"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>Link Pengumpulan</a>`;
+            if (!task.material_link && !task.submission_link) linksContainer.innerHTML += '<p class="text-gray-500 text-sm">Tidak ada link tersedia</p>';
+
+            // 🔹 Trigger Animation
+            const modal = document.getElementById('taskModal');
+            const backdrop = modal.querySelector('.absolute.inset-0');
+            const content = modal.querySelector('.relative.w-full');
+
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); // Kunci scroll body
+
+            // Force reflow agar transisi berjalan
+            void modal.offsetWidth;
+
+            backdrop.classList.remove('opacity-0');
+            content.classList.remove('opacity-0', 'translate-y-full', 'sm:translate-y-4', 'sm:scale-95');
+            content.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+        }
+
+        function closeTaskModal() {
+            const modal = document.getElementById('taskModal');
+            const backdrop = modal.querySelector('.absolute.inset-0');
+            const content = modal.querySelector('.relative.w-full');
+
+            // Reverse animation
+            backdrop.classList.add('opacity-0');
+            content.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+            content.classList.add('opacity-0', 'translate-y-full', 'sm:translate-y-4', 'sm:scale-95');
+
+            // Tunggu animasi selesai baru hide element
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }, 300);
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeTaskModal();
+        });
+
+        // Pass role config to JS
+        window.configRoles = @json(config('roles.list', []));
     </script>
 </body>
 </html>

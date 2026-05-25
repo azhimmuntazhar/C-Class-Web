@@ -17,6 +17,8 @@ class Task extends Model
         'deadline_at' => 'datetime',
     ];
 
+    protected $appends = ['course_name', 'is_expired'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

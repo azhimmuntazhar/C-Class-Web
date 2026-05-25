@@ -7,6 +7,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* Global Scrollbar*/
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(31, 41, 55, 0.4); /* Match bg-gray-800/900 */
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.8); /* gray-600 + opacity */
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 1); /* gray-500 */
+        }
+
+        /*  Firefox Support (Optional tapi disarankan) */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(75, 85, 99, 0.8) rgba(31, 41, 55, 0.4);
+        }
+
+        /* Smooth scroll & navbar padding (tetap pertahankan) */
+        html { scroll-behavior: smooth; }
+        body { padding-top: 72px; }
+
+        /* Animasi Underline (tetap pertahankan) */
+        .nav-underline { position: relative; display: inline-block; }
+        .nav-underline::after {
+            content: ''; position: absolute; left: 0; bottom: -3px; width: 100%; height: 4px;
+            background-color: #10b981; border-radius: 9999px; transform: scaleX(0);
+            transform-origin: right; transition: transform 0.3s ease-in-out;
+        }
+        .nav-underline:hover::after { transform: scaleX(1); transform-origin: left; }
         html { scroll-behavior: smooth; }
         body { padding-top: 72px; }
         .nav-underline { position: relative; display: inline-block; }
