@@ -13,6 +13,67 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
+        /* Loading Screen Styles - Smooth Transition */
+        #loadingScreen {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+        }
+
+        #loadingScreen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Progress bar animation */
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        #progressBar {
+            animation: progress 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Main content - start hidden */
+        main {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        /* Main content - fade in */
+        main.ready {
+            opacity: 1;
+        }
+
+        /* Base animation class */
+        .animate-slide-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        /* Trigger animation */
+        main.ready .animate-slide-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        .delay-6 { transition-delay: 0.6s; }
+
+        @keyframes logoBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+        }
+        #loadingScreen .text-8xl {
+            animation: logoBounce 1s infinite;
+        }
+
         /* Global Scrollbar*/
         ::-webkit-scrollbar {
             width: 0;
@@ -185,12 +246,28 @@
         </div>
     </div>
 
+    <!-- LOADING SCREEN -->
+    <div id="loadingScreen" class="fixed inset-0 z-[100] bg-gray-900 flex flex-col items-center justify-center">
+        <!-- Logo dengan animasi -->
+        <div class="relative mb-6">
+            <span class="text-emerald-500 text-8xl font-bold block animate-pulse">❯</span>
+        </div>
+        
+        <!-- Loading text -->
+        <p class="text-gray-400 text-sm">Informatika CFI</p>
+        
+        <!-- Progress bar -->
+        <div class="w-64 h-1 bg-gray-800 rounded-full mt-8 overflow-hidden">
+            <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full" style="width: 0%"></div>
+        </div>
+    </div>
+
     <!-- MAIN CONTENT AREA -->
     <main class="min-h-screen bg-gray-700">
         <div class="max-w-6xl mx-auto px-4 py-10 w-full">
             
-            <!-- Welcome Section -->
-            <div class="text-center mb-12 mt-20">
+            <!-- ✅ Welcome Section (Delay 1) -->
+            <div class="text-center mb-12 mt-20 animate-slide-up delay-1">
                 <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">
                     Welcome to <span class="text-emerald-500">Class C</span>
                 </h1>
@@ -199,8 +276,8 @@
                 </p>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-20">
-                <!-- Tombol Tasks Public -->
+            <!-- ✅ Buttons (Delay 2) -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-20 animate-slide-up delay-2">
                 <a href="{{ route('tasks.public') }}" 
                 class="group flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-all duration-200 shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,7 +286,6 @@
                     Lihat Daftar Tugas
                 </a>
                 
-                <!-- Tombol Gallery -->
                 <a href="{{ route('galeri') }}" 
                 class="group flex items-center justify-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-xl transition-all duration-200 border border-gray-600 hover:border-gray-500 shadow-lg hover:-translate-y-0.5">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,8 +295,8 @@
                 </a>
             </div>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <!-- ✅ Stats Cards (Delay 3) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-slide-up delay-3">
                 <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
                     <div class="text-emerald-500 mb-2">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
@@ -245,8 +321,8 @@
                 </div>
             </div>
 
-            <!-- Content Box -->
-            <div class="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-6">
+            <!-- ✅ Content Box (Delay 4) -->
+            <div class="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-6 animate-slide-up delay-4">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-xl font-bold text-white">Aktivitas Terbaru</h2>
                     <a href="{{ route('tasks.public') }}" class="text-sm text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">
@@ -255,10 +331,13 @@
                     </a>
                 </div>
 
+                <!-- Task list items dengan staggered animation juga -->
                 @if(isset($latestTasks) && $latestTasks->count() > 0)
                     <div class="space-y-4">
-                        @forelse($latestTasks as $task)
-                        <div onclick="openTaskModal({{ $task->id }})" class="bg-gray-800/60 rounded-xl border border-gray-700 p-5 hover:border-emerald-500/40 hover:bg-gray-800 transition group">
+                        @foreach($latestTasks as $index => $task)
+                        <div onclick="openTaskModal({{ $task->id }})" 
+                            class="bg-gray-800/60 rounded-xl border border-gray-700 p-5 hover:border-emerald-500/40 hover:bg-gray-800 transition group cursor-pointer animate-slide-up"
+                            style="transition-delay: {{ 0.5 + ($index * 0.1) }}s">
                             
                             <!-- Paling Atas -->
                             <div class="flex items-center gap-2 mb-3 flex-wrap">
@@ -313,27 +392,17 @@
                                     {{ $task->deadline_at->format('l, d M H:i') }}
                                 </span>
                             </div>
+                            
                         </div>
-                        @empty
-                            <!-- Empty State -->
-                            <div class="text-center py-12 bg-gray-800/30 rounded-xl border border-dashed border-gray-700">
-                                <svg class="w-12 h-12 mx-auto text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                                <p class="text-gray-500 text-sm">Belum ada tugas yang dimasukkan.</p>
-                            </div>
-                        @endforelse
+                        @endforeach
                     </div>
                 @else
-                    {{-- Empty State --}}
-                    <div class="text-center py-10">
+                    <!-- Empty State -->
+                    <div class="text-center py-10 animate-slide-up delay-5">
                         <svg class="w-16 h-16 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                         </svg>
                         <p class="text-gray-400 text-sm">Belum ada tugas yang dimasukkan.</p>
-                        @auth
-                            <a href="{{ route('tasks.create') }}" class="inline-block mt-3 text-emerald-400 hover:text-emerald-300 text-sm font-medium transition">
-                                + Tambah tugas pertama →
-                            </a>
-                        @endauth
                     </div>
                 @endif
             </div>
@@ -581,6 +650,40 @@
 
         // Pass role config to JS
         window.configRoles = @json(config('roles.list', []));
+
+        // Loading Screen Handler dengan Staggered Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.querySelector('main');
+            
+            // Hide loading screen after 2 seconds
+            setTimeout(() => {
+                // Fade out loading screen
+                if (loadingScreen) {
+                    loadingScreen.classList.add('fade-out');
+                }
+                
+                // Show main content
+                setTimeout(() => {
+                    if (mainContent) {
+                        mainContent.classList.add('ready');
+                    }
+                    // Enable scroll
+                    document.body.style.overflow = '';
+                }, 300);
+                
+                // Remove loading screen after transition
+                setTimeout(() => {
+                    if (loadingScreen) {
+                        loadingScreen.style.display = 'none';
+                    }
+                }, 600);
+                
+            }, 2000);
+        });
+
+        // Prevent scroll while loading
+        document.body.style.overflow = 'hidden';
     </script>
 </body>
 </html>
