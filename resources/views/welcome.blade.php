@@ -15,8 +15,8 @@
     <style>
         /* Global Scrollbar*/
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 0;
+            height: 0;
         }
         ::-webkit-scrollbar-track {
             background: rgba(31, 41, 55, 0.4); /* Match bg-gray-800/900 */
@@ -413,8 +413,8 @@
                         <p id="modalStarts" class="text-white text-sm font-medium"></p>
                     </div>
                     <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600">
-                        <div class="flex items-center gap-2 text-gray-400 text-xs mb-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="flex items-center gap-2 text-orange-300 text-xs mb-1">
+                            <svg class="w-4 h-4" fill="none" stroke="orange" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             Deadline
                         </div>
                         <p id="modalDeadline" class="text-white text-sm font-medium"></p>
