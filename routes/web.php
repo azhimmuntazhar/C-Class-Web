@@ -16,6 +16,7 @@ Route::get('/', function () {
     $totalActiveTasks = Task::where('deadline_at', '>', now())->count();
     //5 tugas terbaru
     $latestTasks = Task::with('user')
+        ->where('deadline_at', '>', now())
         ->latest()
         ->limit(5)
         ->get();
