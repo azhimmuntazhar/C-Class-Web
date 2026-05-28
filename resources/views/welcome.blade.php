@@ -277,7 +277,7 @@
             </div>
 
             <!-- ✅ Buttons (Delay 2) -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-20 animate-slide-up delay-2">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10 animate-slide-up delay-2">
                 <a href="{{ route('tasks.public') }}" 
                 class="group flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-all duration-200 shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -296,7 +296,7 @@
             </div>
 
             <!-- ✅ Stats Cards (Delay 3) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-slide-up delay-3">
+            <div class="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-slide-up delay-3">
                 <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
                     <div class="text-emerald-500 mb-2">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
@@ -323,7 +323,7 @@
 
             <!-- ✅ Content Box (Delay 4) -->
             <div class="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-6 animate-slide-up delay-4">
-                <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center justify-between mb-3">
                     <h2 class="text-xl font-bold text-white">Aktivitas Terbaru</h2>
                     <a href="{{ route('tasks.public') }}" class="text-sm text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">
                         Lihat Semua

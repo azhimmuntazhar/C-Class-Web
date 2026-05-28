@@ -155,7 +155,7 @@
         <div class="max-w-7xl mx-auto">
             
             <!-- Header -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-3">
                 <div>
                     <h1 class="text-2xl md:text-3xl font-bold text-white">Kalender Tugas</h1>
                     <p class="text-gray-400 text-sm mt-1">Kelola dan lihat jadwal tugas</p>
@@ -174,7 +174,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                 
                 <!-- SIDEBAR -->
                 <div class="lg:col-span-1 space-y-4">
@@ -204,7 +204,7 @@
                     </div>
 
                     <!--TUGAS AKTIF (Replacing "Tugas Hari Ini") -->
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-4">
+                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-3">
                         <h3 class="font-semibold text-white mb-3 flex items-center gap-2">
                             @if($status === 'active')
                                 <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
