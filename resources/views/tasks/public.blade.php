@@ -272,7 +272,10 @@
 
                             <!-- Calendar Days -->
                             @php
-                                $currentDate = now();
+                                // Pastikan kita menggunakan timezone yang konsisten (sesuaikan dengan config/app.php)
+                                $appTimezone = config('app.timezone', 'Asia/Jakarta');
+                                
+                                $currentDate = now($appTimezone);
                                 $daysInMonth = $currentDate->daysInMonth;
                                 $firstDayOfMonth = $currentDate->copy()->startOfMonth();
                                 $startingDay = $firstDayOfMonth->dayOfWeek;
@@ -287,8 +290,11 @@
                                     $isToday = $dayDate->isToday();
                                     $isCurrentMonth = $dayDate->month == $currentDate->month;
                                     
-                                    $dayTasks = $tasks->filter(function($task) use ($dayDate) {
-                                        return $task->deadline_at->format('Y-m-d') == $dayDate->format('Y-m-d');
+                                    // FIX: Bandingkan tanggal dengan timezone yang sama
+                                    $dayTasks = $tasks->filter(function($task) use ($dayDate, $appTimezone) {
+                                        $taskDate = $task->deadline_at->copy()->setTimezone($appTimezone)->toDateString();
+                                        $calendarDate = $dayDate->copy()->setTimezone($appTimezone)->toDateString();
+                                        return $taskDate === $calendarDate;
                                     });
                                 @endphp
                                 
