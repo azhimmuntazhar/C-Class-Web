@@ -179,7 +179,7 @@
                 <!-- SIDEBAR -->
                 <div class="lg:col-span-1 space-y-4">
                     <!-- Mini Calendar -->
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-4">
+                    <div class="hidden lg:block bg-gray-800 rounded-xl border border-gray-700 p-4">
                         <div class="flex items-center justify-between mb-4">
                             <button onclick="changeMonth(-1)" class="p-1 hover:bg-gray-700 rounded text-gray-400 hover:text-white">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -203,32 +203,41 @@
                         </div>
                     </div>
 
-                    <!-- ✅ TUGAS AKTIF (Replacing "Tugas Hari Ini") -->
+                    <!--TUGAS AKTIF (Replacing "Tugas Hari Ini") -->
                     <div class="bg-gray-800 rounded-xl border border-gray-700 p-4">
                         <h3 class="font-semibold text-white mb-3 flex items-center gap-2">
-                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                            Tugas Aktif
+                            @if($status === 'active')
+                                <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                                Tugas Aktif
+                            @else
+                                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Tugas Terlewat
+                            @endif
                         </h3>
-                        <div id="activeTasks" class="space-y-2 max-h-96 overflow-y-auto">
-                            @php
-                                $activeTasks = $tasks->filter(function($task) {
-                                    return !$task->is_expired && $task->deadline_at->isFuture();
-                                })->sortBy('deadline_at');
-                            @endphp
-                            @forelse($activeTasks->take(5) as $task)
+                        
+                        <div class="space-y-2 max-h-96 overflow-y-auto">
+                            {{-- $tasks sudah difilter otomatis oleh controller sesuai $status --}}
+                            @forelse($tasks->take(5) as $task)
                             <div class="p-2 bg-gray-700/50 rounded-lg border border-gray-600 hover:border-emerald-500/50 transition cursor-pointer" onclick="openTaskModal({{ $task->id }})">
                                 <p class="text-white text-sm font-medium truncate">{{ $task->title }}</p>
                                 <p class="text-gray-400 text-xs">{{ $task->course_name }}</p>
-                                <div class="flex items-center gap-1 mt-1 text-emerald-400 text-xs">
+                                <div class="flex items-center gap-1 mt-1 text-xs {{ $status === 'active' ? 'text-emerald-400' : 'text-red-400' }}">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    {{ $task->deadline_at->diffForHumans() }}
+                                    @if($status === 'active')
+                                        {{ $task->deadline_at->diffForHumans() }}
+                                    @else
+                                        Lewat {{ $task->deadline_at->diffForHumans() }}
+                                    @endif
                                 </div>
                             </div>
                             @empty
-                            <p class="text-gray-500 text-sm text-center py-4">Tidak ada tugas aktif</p>
+                            <p class="text-gray-500 text-sm text-center py-4">
+                                Tidak ada tugas {{ $status === 'active' ? 'aktif' : 'terlewat' }}
+                            </p>
                             @endforelse
-                            @if($activeTasks->count() > 5)
-                            <p class="text-gray-400 text-xs text-center mt-2">+{{ $activeTasks->count() - 5 }} tugas lainnya</p>
+                            
+                            @if($tasks->count() > 5)
+                            <p class="text-gray-400 text-xs text-center mt-2">+{{ $tasks->count() - 5 }} lainnya</p>
                             @endif
                         </div>
                     </div>
@@ -395,9 +404,24 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-gray-900 border-t border-gray-800 py-6 mt-auto">
+    <footer class="bg-gray-900 border-t border-gray-800 py-8 mt-auto">
         <div class="max-w-6xl mx-auto px-4 text-center">
-            <p class="text-gray-500 text-sm">&copy; {{ date('Y') }} Informatika CFI</p>
+            <div class="flex justify-center items-center gap-2 mb-4">
+                <span class="text-emerald-500 font-bold text-xl">❯</span>
+                <span class="text-white font-semibold">Informatika CFI</span>
+            </div>
+            <p class="text-gray-400 text-sm mb-4">
+                Platform manajemen tugas & doksli untuk mahasiswa Informatika.
+            </p>
+            <div class="flex justify-center item-center gap-2 mb-6">
+                <a class="text-gray-400 hover:text-emerald-400 text-sm transition">Dibuat dengan</a>
+                <a class="text-red-500 text-lg leading-none hover:scale-110 transition flex items-center">❤️</a>
+                <a class="text-gray-400 hover:text-emerald-400 text-sm transition">
+                    oleh Engginer</a>
+            </div>
+            <p class="text-gray-500 text-xs">
+                &copy; {{ date('Y') }} Informatika CFI. All rights reserved.
+            </p>
         </div>
     </footer>
 
