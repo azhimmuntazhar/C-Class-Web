@@ -186,10 +186,10 @@
         }
     </style>
 </head>
-<body class="bg-gray-700">
+<body class="bg-gray-800">
 
     <!-- TOP NAVBAR (Fixed) -->
-    <nav class="fixed top-0 left-0 right-0 h-16 bg-gray-800 text-white shadow-lg z-50 flex items-center justify-between px-4 md:px-20 transition-all duration-300">
+    <nav class="fixed top-0 left-0 right-0 h-16 bg-gray-800/80 backdrop-blur-md text-white shadow-lg z-50 flex items-center justify-between px-4 md:px-20 transition-all duration-300 border-b border-gray-700/50">
         <div class="flex items-center gap-4">
             <button id="sidebarToggle" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-1">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -263,10 +263,10 @@
     </div>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="min-h-screen bg-gray-700">
+    <main class="min-h-screen bg-gray-800">
         <div class="max-w-6xl mx-auto px-4 py-10 w-full">
             
-            <!-- ✅ Welcome Section (Delay 1) -->
+            <!-- Welcome Section (Delay 1) -->
             <div class="text-center mb-12 mt-20 animate-slide-up delay-1">
                 <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">
                     Welcome to <span class="text-emerald-500">Class C</span>
@@ -276,7 +276,7 @@
                 </p>
             </div>
 
-            <!-- ✅ Buttons (Delay 2) -->
+            <!-- Buttons (Delay 2) -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10 animate-slide-up delay-2">
                 <a href="{{ route('tasks.public') }}" 
                 class="group flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-all duration-200 shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5">
@@ -287,7 +287,7 @@
                 </a>
                 
                 <a href="{{ route('galeri') }}" 
-                class="group flex items-center justify-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-xl transition-all duration-200 border border-gray-600 hover:border-gray-500 shadow-lg hover:-translate-y-0.5">
+                class="group flex items-center justify-center gap-2 px-6 py-3 bg-gray-700/60 hover:bg-gray-600 text-white font-medium rounded-xl transition-all duration-200 border border-gray-600 hover:border-gray-500 shadow-lg hover:-translate-y-0.5">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
@@ -295,9 +295,9 @@
                 </a>
             </div>
 
-            <!-- ✅ Stats Cards (Delay 3) -->
+            <!-- Stats Cards (Delay 3) -->
             <div class="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-slide-up delay-3">
-                <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
+                <div class="bg-gray-700/60 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
                     <div class="text-emerald-500 mb-2">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                     </div>
@@ -305,14 +305,14 @@
                     <p class="text-3xl font-bold text-white mt-1">{{ $totalActiveTasks ?? 0 }}</p>
                     <p class="text-xs text-gray-500 mt-1">Dari total {{ \App\Models\Task::count() ?? 0 }} tugas</p>
                 </div>
-                <div onClick="window.location.href='{{ route('galeri') }}'" class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
+                <div onClick="window.location.href='{{ route('galeri') }}'" class="bg-gray-700/60 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
                     <div class="text-blue-500 mb-2">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
                     <h3 class="text-white font-semibold text-lg">Doksli Terkumpul</h3>
                     <p class="text-3xl font-bold text-white mt-1">{{ $totalDoksli ?? 0 }}</p>
                 </div>
-                <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
+                <div class="bg-gray-700/60 p-6 rounded-2xl border border-gray-700 shadow-sm hover:border-emerald-500/50 transition">
                     <div class="text-purple-500 mb-2">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </div>
@@ -321,7 +321,7 @@
                 </div>
             </div>
 
-            <!-- ✅ Content Box (Delay 4) -->
+            <!-- Content Box (Delay 4) -->
             <div class="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-6 animate-slide-up delay-4">
                 <div class="flex items-center justify-between mb-3">
                     <h2 class="text-xl font-bold text-white">Aktivitas Terbaru</h2>
@@ -336,7 +336,7 @@
                     <div class="space-y-4">
                         @foreach($latestTasks as $index => $task)
                         <div onclick="openTaskModal({{ $task->id }})" 
-                            class="bg-gray-800/60 rounded-xl border border-gray-700 p-5 hover:border-emerald-500/40 hover:bg-gray-800 transition group cursor-pointer animate-slide-up"
+                            class="bg-gray-700/60 rounded-xl border border-gray-700 p-5 hover:border-emerald-500/40 hover:bg-gray-800 group cursor-pointer animate-slide-up"
                             style="transition-delay: {{ 0.5 + ($index * 0.1) }}s">
                             
                             <!-- Paling Atas -->
