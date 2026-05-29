@@ -185,6 +185,7 @@
             -webkit-overflow-scrolling: touch;
         }
     </style>
+    
 </head>
 <body class="bg-gray-800">
 
