@@ -42,9 +42,53 @@ Route::get('/about', function () {
 //public route untuk tugas
 Route::get('/tugas', [\App\Http\Controllers\TaskController::class, 'publicIndex'])->name('tasks.public');
 
-// UPDATE 1: Redirect dashboard ke tasks.index agar lebih berguna
+// landingpage role based
 Route::get('/dashboard', function () {
-    return redirect()->route('tasks.index');
+    $user = auth()->user();
+    
+    // 🎯 LOGIKA PER ROLE
+    if ($user->role === 'admin') {
+        // === ADMIN VIEW ===
+        // Admin bisa lihat semua tugas + stats user management
+        $totalUsers = \App\Models\User::count();
+        $totalTasks = \App\Models\Task::count();
+        $activeTasks = \App\Models\Task::where('deadline_at', '>', now())->count();
+        $latestUsers = \App\Models\User::latest()->limit(5)->get();
+        
+        return view('dashboard.admin', compact('totalUsers', 'totalTasks', 'activeTasks', 'latestUsers'));
+        
+    } elseif ($user->role === 'manager') {
+        // === MANAGER VIEW ===
+        // Manager bisa lihat semua tugas dari basic_roles (Ketua)
+        $basicRoles = config('roles.basic_roles');
+        
+        $tasks = \App\Models\Task::with('user')
+            ->whereIn('user_id', function($query) use ($basicRoles) {
+                $query->select('id')->from('users')->whereIn('role', $basicRoles);
+            })
+            ->latest()
+            ->paginate(10);
+            
+        $activeCount = clone $tasks; // Clone query untuk count
+        $activeCount = $activeCount->where('deadline_at', '>', now())->count();
+        
+        return view('dashboard.manager', compact('tasks', 'activeCount'));
+        
+    } else {
+        // === KETUA VIEW (Default) ===
+        // Ketua hanya lihat tugas divisinya sendiri
+        $courseKey = config("roles.course_mapping.{$user->role}");
+        
+        $tasks = \App\Models\Task::with('user')
+            ->where('course_key', $courseKey)
+            ->latest()
+            ->paginate(10);
+            
+        $courseName = config("roles.courses.{$courseKey}") ?? ucfirst(str_replace('_', ' ', $courseKey));
+        
+        return view('dashboard.ketua', compact('tasks', 'courseName', 'courseKey'));
+    }
+    
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
