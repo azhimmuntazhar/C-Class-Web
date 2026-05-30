@@ -434,10 +434,10 @@
     <!-- TASK DETAIL MODAL -->
     <div id="taskModal" class="fixed inset-0 z-[70] hidden flex items-end sm:items-center justify-center">
         <!-- Backdrop -->
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="closeTaskModal()"></div>
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-md opacity-0 transition-opacity duration-300" onclick="closeTaskModal()"></div>
 
         <!-- Modal Content -->
-        <div class="relative w-full sm:max-w-2xl mx-0 sm:mx-4 bg-gray-800 sm:rounded-2xl rounded-t-2xl border-0 sm:border border-gray-700 shadow-2xl flex flex-col overflow-hidden max-h-[90vh] sm:max-h-[85vh] opacity-0 translate-y-full sm:translate-y-4 sm:scale-95 transition-all duration-300 ease-out will-change-transform,opacity">
+        <div class="relative w-full sm:max-w-2xl mx-0 sm:mx-4 bg-gray-800/60 backdrop-blur-md sm:rounded-2xl rounded-t-2xl border-0 sm:border border-gray-700 shadow-2xl flex flex-col overflow-hidden max-h-[90vh] sm:max-h-[85vh] opacity-0 translate-y-full sm:translate-y-4 sm:scale-95 transition-all duration-300 ease-out will-change-transform,opacity">
             
             <!-- Header -->
             <div class="flex items-center justify-between px-4 py-3 border-b border-gray-700 bg-gray-800 flex-shrink-0">
