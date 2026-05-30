@@ -97,7 +97,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-700 min-h-screen flex flex-col">
+<body class="bg-gray-800 min-h-screen flex flex-col">
 
     <!-- TOP NAVBAR (Fixed) -->
     <nav class="fixed top-0 left-0 right-0 h-16 bg-gray-800/80 backdrop-blur-md text-white shadow-lg z-50 flex items-center justify-between px-4 md:px-20 transition-all duration-300 border-b border-gray-700/50">
@@ -178,10 +178,10 @@
                 <span class="text-emerald-500">❯</span><span class="text-gray-400"> Team Project</span>
             </p>
             <!-- 👥 Team Members Grid (4 Orang) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                 
                 <!-- Member 1 -->
-                <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-sm hover:border-emerald-500/50 transition group text-center">
+                <div class="bg-gray-700/20 rounded-2xl p-6 border border-gray-600 shadow-sm hover:border-emerald-500/50 transition group text-center">
                     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
                         AD
                     </div>
@@ -199,7 +199,7 @@
                 </div>
 
                 <!-- Member 2 -->
-                <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-sm hover:border-emerald-500/50 transition group text-center">
+                <div class="bg-gray-700/20 rounded-2xl p-6 border border-gray-600 shadow-sm hover:border-emerald-500/50 transition group text-center">
                     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
                         RS
                     </div>
@@ -217,7 +217,7 @@
                 </div>
 
                 <!-- Member 3 -->
-                <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-sm hover:border-emerald-500/50 transition group text-center">
+                <div class="bg-gray-700/20 rounded-2xl p-6 border border-gray-600 shadow-sm hover:border-emerald-500/50 transition group text-center">
                     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
                         BK
                     </div>
@@ -235,7 +235,7 @@
                 </div>
 
                 <!-- Member 4 -->
-                <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-sm hover:border-emerald-500/50 transition group text-center">
+                <div class="bg-gray-700/20 rounded-2xl p-6 border border-gray-600 shadow-sm hover:border-emerald-500/50 transition group text-center">
                     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
                         DS
                     </div>
@@ -251,41 +251,40 @@
                         </a>
                     </div>
                 </div>
-
             </div>
 
             <!-- 💻 Tech Stack Section -->
-            <div class="bg-gray-800 rounded-2xl p-8 border border-gray-700 shadow-sm mb-20">
+            <div class="bg-gray-700/20 rounded-2xl p-8 border border-gray-600 shadow-sm mb-20">
                 <h2 class="text-2xl font-bold text-white mb-6 text-center">Tech Stack</h2>
                 <div class="flex flex-wrap justify-center gap-4">
                     
                     <!-- Laravel -->
-                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-full border border-gray-600 hover:border-red-500 transition">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-red-500 transition">
                         <span class="text-red-500 font-bold text-sm">Laravel 13</span>
                     </div>
                     
                     <!-- PHP -->
-                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-full border border-gray-600 hover:border-indigo-500 transition">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-indigo-500 transition">
                         <span class="text-indigo-400 font-bold text-sm">PHP 8.3</span>
                     </div>
                     
                     <!-- Tailwind -->
-                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-full border border-gray-600 hover:border-cyan-400 transition">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-cyan-400 transition">
                         <span class="text-cyan-400 font-bold text-sm">Tailwind CSS</span>
                     </div>
                     
                     <!-- MySQL -->
-                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-full border border-gray-600 hover:border-blue-400 transition">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-blue-400 transition">
                         <span class="text-blue-400 font-bold text-sm">MySQL</span>
                     </div>
                     
                     <!-- Intervention Image -->
-                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-full border border-gray-600 hover:border-emerald-400 transition">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-emerald-400 transition">
                         <span class="text-emerald-400 font-bold text-sm">Intervention Image</span>
                     </div>
                     
                     <!-- SweetAlert2 -->
-                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-full border border-gray-600 hover:border-orange-400 transition">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-orange-400 transition">
                         <span class="text-orange-400 font-bold text-sm">SweetAlert2</span>
                     </div>
 

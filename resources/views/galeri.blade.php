@@ -51,7 +51,7 @@
         .gallery-img { transition: transform 0.5s ease; will-change: transform; }
     </style>
 </head>
-<body class="bg-gray-700">
+<body class="bg-gray-800">
 
     <!-- TOP NAVBAR (Fixed) -->
     <nav class="fixed top-0 left-0 right-0 h-16 bg-gray-800/80 backdrop-blur-md text-white shadow-lg z-50 flex items-center justify-between px-4 md:px-20 transition-all duration-300 border-b border-gray-700/50">
@@ -150,7 +150,7 @@
             @if($galleries->count() > 0)
                 <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
                     @foreach($galleries as $index => $item)
-                        <div class="gallery-card group bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 cursor-pointer"
+                        <div class="gallery-card group bg-gray-800 rounded-xl overflow-hidden border border-gray-600 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 cursor-pointer"
                              onclick="openLightbox({{ $item->id }}, '{{ asset('storage/' . $item->image) }}', '{{ addslashes($item->title) }}', '{{ $item->created_at->format('d M Y, H:i') }}')"
                              style="animation-delay: {{ $index * 0.05 }}s">
                             
@@ -174,7 +174,7 @@
                             </div>
                             
                             <!-- Info (Mobile Fallback) -->
-                            <div class="p-3 md:hidden">
+                            <div class="p-3 md:hidden bg-gray-700/70">
                                 <h4 class="font-medium text-white text-sm truncate">{{ $item->title }}</h4>
                                 <p class="text-gray-500 text-xs">{{ $item->created_at->format('d M Y') }}</p>
                             </div>

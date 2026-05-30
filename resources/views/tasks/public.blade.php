@@ -90,7 +90,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-700 min-h-screen flex flex-col">
+<body class="bg-gray-800 min-h-screen flex flex-col">
 
     <!-- TOP NAVBAR (Fixed) -->
     <nav class="fixed top-0 left-0 right-0 h-16 bg-gray-800/80 backdrop-blur-md text-white shadow-lg z-50 flex items-center justify-between px-4 md:px-20 transition-all duration-300 border-b border-gray-700/50">
@@ -162,7 +162,7 @@
                 </div>
                 
                 <!-- Filter Toggle -->
-                <div class="flex bg-gray-800 p-1 rounded-lg border border-gray-700">
+                <div class="flex bg-gray-700/60 p-1 rounded-lg border border-gray-600">
                     <a href="{{ route('tasks.public', ['status' => 'active']) }}" 
                        class="px-4 py-2 rounded-md text-sm font-medium transition {{ $status === 'active' ? 'bg-emerald-600 text-white' : 'text-gray-400 hover:text-white' }}">
                         Aktif
@@ -179,7 +179,7 @@
                 <!-- SIDEBAR -->
                 <div class="lg:col-span-1 space-y-4">
                     <!-- Mini Calendar -->
-                    <div class="hidden lg:block bg-gray-800 rounded-xl border border-gray-700 p-4">
+                    <div class="hidden lg:block bg-gray-700/60 rounded-xl border border-gray-600 p-4">
                         <div class="flex items-center justify-between mb-4">
                             <button onclick="changeMonth(-1)" class="p-1 hover:bg-gray-700 rounded text-gray-400 hover:text-white">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -204,7 +204,7 @@
                     </div>
 
                     <!--TUGAS AKTIF (Replacing "Tugas Hari Ini") -->
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-3">
+                    <div class="bg-gray-700/60 rounded-xl border border-gray-600 p-3">
                         <h3 class="font-semibold text-white mb-3 flex items-center gap-2">
                             @if($status === 'active')
                                 <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
@@ -218,7 +218,7 @@
                         <div class="space-y-2 max-h-96 overflow-y-auto">
                             {{-- $tasks sudah difilter otomatis oleh controller sesuai $status --}}
                             @forelse($tasks->take(5) as $task)
-                            <div class="p-2 bg-gray-700/50 rounded-lg border border-gray-600 hover:border-emerald-500/50 transition cursor-pointer" onclick="openTaskModal({{ $task->id }})">
+                            <div class="p-2 bg-gray-800 rounded-lg border border-gray-600 hover:border-emerald-500/50 transition cursor-pointer" onclick="openTaskModal({{ $task->id }})">
                                 <p class="text-white text-sm font-medium truncate">{{ $task->title }}</p>
                                 <p class="text-gray-400 text-xs">{{ $task->course_name }}</p>
                                 <div class="flex items-center gap-1 mt-1 text-xs {{ $status === 'active' ? 'text-emerald-400' : 'text-red-400' }}">
@@ -245,7 +245,7 @@
 
                 <!-- MAIN CALENDAR -->
                 <div class="lg:col-span-3">
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-4 md:p-6">
+                    <div class="bg-gray-700/60 rounded-xl border border-gray-600 p-4 md:p-6">
                         <!-- Calendar Header -->
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-xl font-bold text-white" id="calendarTitle">April 2026</h2>
@@ -260,7 +260,7 @@
                         </div>
 
                         <!-- Calendar Grid -->
-                        <div class="grid grid-cols-7 gap-px bg-gray-700 border border-gray-700 rounded-lg overflow-hidden">
+                        <div class="grid grid-cols-7 gap-px bg-gray-700 border border-gray-600 rounded-lg overflow-hidden">
                             <!-- Day Headers -->
                             <div class="bg-gray-800 p-2 text-center text-xs font-medium text-gray-400">Minggu</div>
                             <div class="bg-gray-800 p-2 text-center text-xs font-medium text-gray-400">Senin</div>
