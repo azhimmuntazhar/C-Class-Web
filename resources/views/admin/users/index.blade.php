@@ -15,6 +15,65 @@
 </style>
 @endpush
 
+@php
+    /**
+     * Cek apakah user yang login boleh mengedit target user
+     * 
+     * Rules:
+     * - Admin: Bisa edit Manager & Ketua, TIDAK bisa edit Admin (termasuk diri sendiri)
+     * - Manager: Hanya bisa edit Ketua, TIDAK bisa edit Admin/Manager (termasuk diri sendiri)
+     */
+    $canEditUser = function($targetUser) {
+        $currentUser = auth()->user();
+        
+        // Tidak bisa edit diri sendiri
+        if ($targetUser->id === $currentUser->id) {
+            return false;
+        }
+        
+        if ($currentUser->role === 'admin') {
+            // Admin TIDAK bisa edit admin lain, tapi bisa edit manager & ketua
+            if ($targetUser->role === 'admin') {
+                return false;
+            }
+            return $targetUser->role === 'manager' || str_starts_with($targetUser->role, 'ketua_');
+        }
+        
+        if ($currentUser->role === 'manager') {
+            // Manager HANYA bisa edit ketua
+            return str_starts_with($targetUser->role, 'ketua_');
+        }
+        
+        return false;
+    };
+    
+    /**
+     * Get list of roles that current user can assign to others
+     */
+    $getAssignableRoles = function() {
+        $currentUser = auth()->user();
+        $allRoles = config('roles.list', []);
+        
+        if ($currentUser->role === 'admin') {
+            // Admin bisa assign: manager & ketua_* (tapi bukan admin)
+            return array_filter($allRoles, fn($key) => 
+                $key === 'manager' || str_starts_with($key, 'ketua_'), 
+                ARRAY_FILTER_USE_KEY
+            );
+        }
+        
+        if ($currentUser->role === 'manager') {
+            // Manager hanya bisa assign: ketua_*
+            return array_filter($allRoles, fn($key) => 
+                str_starts_with($key, 'ketua_'), 
+                ARRAY_FILTER_USE_KEY
+            );
+        }
+        
+        return [];
+    };
+@endphp
+
 @section('content')
 <div class="p-4 md:p-8">
     
@@ -133,16 +192,25 @@
                         </td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-1">
-                                <!-- Edit Role -->
-                                <button onclick="openEditRoleModal({{ $user->id }}, '{{ $user->name }}', '{{ $user->role }}')" 
-                                        class="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/20 rounded-lg transition" title="Edit Role">
+                                <!-- Edit Role Button (Conditional) -->
+                                @if($canEditUser($user))
+                                <button onclick="openEditRoleModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->role }}')" 
+                                        class="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/20 rounded-lg transition" 
+                                        title="Edit Role">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </button>
+                                @else
+                                    <!-- Disabled state (optional) -->
+                                    <span class="p-2 text-gray-600 cursor-not-allowed" title="Tidak dapat mengedit user ini">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </span>
+                                @endif
                                 
-                                <!-- Delete -->
-                                @if($user->id !== auth()->id())
-                                <button onclick="confirmDelete({{ $user->id }}, '{{ $user->name }}')" 
-                                        class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-900/20 rounded-lg transition" title="Hapus User">
+                                <!-- Delete Button (Conditional - cannot delete self or higher role) -->
+                                @if($user->id !== auth()->id() && !($user->role === 'admin' && auth()->user()->role !== 'admin'))
+                                <button onclick="confirmDelete({{ $user->id }}, '{{ addslashes($user->name) }}')" 
+                                        class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-900/20 rounded-lg transition" 
+                                        title="Hapus User">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                                 @endif
@@ -267,6 +335,9 @@
                             <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
                     </select>
+                        @if(auth()->user()->role === 'manager')
+                            <p class="text-xs text-gray-500 mt-1">💡 Sebagai Manager, Anda hanya dapat mengatur role Ketua</p>
+                        @endif
                 </div>
                 
                 <div class="flex gap-3 pt-2">
