@@ -87,7 +87,7 @@
                 </div>
                 <div>
                     <h3 class="text-white font-semibold group-hover:text-emerald-400 transition">Semua Tugas</h3>
-                    <p class="text-gray-400 text-sm mt-1">Lihat dan kelola semua tugas di sistem dari semua divisi</p>
+                    <p class="text-gray-400 text-sm mt-1">Lihat dan kelola semua tugas di sistem dari semua ketua</p>
                 </div>
             </div>
         </a>
@@ -116,7 +116,6 @@
                         <th class="px-4 py-3 text-left font-medium">User</th>
                         <th class="px-4 py-3 text-left font-medium hidden sm:table-cell">Role</th>
                         <th class="px-4 py-3 text-left font-medium">Joined</th>
-                        <th class="px-4 py-3 text-right font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-600">
@@ -134,17 +133,12 @@
                             </div>
                         </td>
                         <td class="px-4 py-3 hidden sm:table-cell">
-                            <span class="inline-flex items-center px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-md capitalize">
-                                {{ $user->role }}
+                            <span class="inline-flex items-center px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-md">
+                                {{ config('roles.list.' . $user->role) ?? ucfirst($user->role) }}
                             </span>
                         </td>
                         <td class="px-4 py-3 text-gray-300">
                             {{ $user->created_at->format('d M Y') }}
-                        </td>
-                        <td class="px-4 py-3 text-right">
-                            <button class="text-gray-400 hover:text-white transition">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
-                            </button>
                         </td>
                     </tr>
                     @empty
