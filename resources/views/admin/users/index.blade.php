@@ -43,7 +43,7 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
         <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
             <p class="text-gray-400 text-xs uppercase">Total User</p>
             <p class="text-2xl font-bold text-white">{{ $users->total() }}</p>
@@ -53,40 +53,39 @@
             <p class="text-2xl font-bold text-red-400">{{ $users->filter(fn($u) => $u->role === 'admin')->count() }}</p>
         </div>
         <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
+            <p class="text-gray-400 text-xs uppercase">Manager</p>
+            <p class="text-2xl font-bold text-purple-400">{{ $users->filter(fn($u) => $u->role === 'manager')->count() }}</p>
+        </div>
+        <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
             <p class="text-gray-400 text-xs uppercase">Ketua</p>
             <p class="text-2xl font-bold text-emerald-400">{{ $users->filter(fn($u) => str_starts_with($u->role, 'ketua_'))->count() }}</p>
         </div>
     </div>
 
     <!-- Filters & Search (Desktop) -->
-    <div class="hidden sm:flex flex-wrap items-center gap-4 mb-6 bg-gray-700/60 p-4 rounded-xl border border-gray-600">
-        <!-- Search -->
-        <div class="relative flex-1 min-w-[200px]">
-            <input type="text" id="searchDesktop" placeholder="Cari nama atau email..." 
-                   class="w-full px-4 py-2.5 pl-10 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
-            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        </div>
-        
-        <!-- Filter by Role -->
-        <select id="filterRole" class="px-4 py-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-            <option value="">Semua Role</option>
-            @foreach(config('roles.list') as $key => $label)
-                <option value="{{ $key }}">{{ $label }}</option>
-            @endforeach
-        </select>
-        
-        <!-- Filter by Status -->
-        <select id="filterStatus" class="px-4 py-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-            <option value="">Semua Status</option>
-            <option value="active">Aktif</option>
-            <option value="inactive">Non-aktif</option>
-        </select>
-        
-        <!-- Reset Filter -->
-        <button onclick="resetFilters()" class="px-4 py-2.5 text-gray-400 hover:text-white text-sm transition">
-            Reset
-        </button>
+<div class="hidden sm:flex flex-wrap items-center gap-4 mb-6 bg-gray-700/60 p-4 rounded-xl border border-gray-600">
+    <!-- Search -->
+    <div class="relative flex-1 min-w-[200px]">
+        <input type="text" id="searchDesktop" placeholder="Cari nama atau email..." 
+               class="w-full px-4 py-2.5 pl-10 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
+        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
     </div>
+    
+    <!-- Filter by Role -->
+    <select id="filterRole" class="px-4 py-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+        <option value="">Semua Role</option>
+        @foreach(config('roles.list') as $key => $label)
+            <option value="{{ $key }}">{{ $label }}</option>
+        @endforeach
+    </select>
+    
+    <!-- Reset Button (Lebih Jelas) -->
+    <button onclick="resetFilters()" 
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-600 hover:bg-gray-500 text-white text-sm font-medium rounded-lg transition border border-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        Reset
+    </button>
+</div>
 
     <!-- User Table -->
     <div class="bg-gray-700/60 rounded-xl border border-gray-600 overflow-hidden">
@@ -344,25 +343,21 @@
     // Search & Filter (Client-side for demo)
     const searchInputs = ['searchMobile', 'searchDesktop'].map(id => document.getElementById(id)).filter(Boolean);
     const filterRole = document.getElementById('filterRole');
-    const filterStatus = document.getElementById('filterStatus');
     const userRows = document.querySelectorAll('#userTableBody tr[data-role]');
     
     function filterUsers() {
         const query = (searchInputs.find(el => el?.value)?.value || '').toLowerCase().trim();
         const roleFilter = filterRole?.value || '';
-        const statusFilter = filterStatus?.value || '';
         
         userRows.forEach(row => {
             const name = row.querySelector('.font-medium.text-white')?.textContent.toLowerCase() || '';
             const email = row.querySelector('.text-gray-500')?.textContent.toLowerCase() || '';
             const role = row.dataset.role;
-            const status = row.dataset.status;
             
             const matchesSearch = !query || name.includes(query) || email.includes(query);
             const matchesRole = !roleFilter || role === roleFilter;
-            const matchesStatus = !statusFilter || status === statusFilter;
             
-            if (matchesSearch && matchesRole && matchesStatus) {
+            if (matchesSearch && matchesRole) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';
@@ -373,7 +368,6 @@
     function resetFilters() {
         searchInputs.forEach(el => { if (el) el.value = ''; });
         if (filterRole) filterRole.value = '';
-        if (filterStatus) filterStatus.value = '';
         filterUsers();
     }
     
