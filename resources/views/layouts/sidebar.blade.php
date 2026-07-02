@@ -158,6 +158,17 @@
                 </a>
             </div>
         @endif
+        <!-- Manager Only Section -->
+        @if(auth()->user()->role === 'manager')
+            <div class="pt-4 mt-4 border-t border-gray-700">
+                <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Manager</p>
+                <a href="{{ route('admin.users.index') }}" 
+                   class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'admin.users') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    Kelola User
+                </a>
+            </div>
+        @endif
         
     </nav>
     
