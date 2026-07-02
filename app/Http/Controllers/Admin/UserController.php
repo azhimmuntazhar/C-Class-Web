@@ -21,22 +21,25 @@ class UserController extends Controller
     }
 
     /**
-     * Helper: Get roles yang boleh di-assign oleh $editor ke $target
+     * Helper: Get roles yang boleh di-assign oleh $editor
+     * 
+     * @param string $editorRole Role dari user yang sedang login
+     * @param string|null $targetRole Role dari user target (optional untuk create)
      */
-    private function getAssignableRoles(string $editorRole, string $targetRole): array
+    private function getAssignableRoles(string $editorRole, ?string $targetRole = null): array
     {
         $allRoles = array_keys(Config::get('roles.list', []));
         
         if ($editorRole === 'admin') {
             // Admin: bisa assign manager + basic roles (tapi bukan admin)
-            return array_filter($allRoles, fn($r) => 
+            return array_values(array_filter($allRoles, fn($r) => 
                 $r === 'manager' || $this->isBasicRole($r)
-            );
+            ));
         }
         
         if ($editorRole === 'manager') {
             // Manager: hanya bisa assign basic roles (bukan admin/manager)
-            return array_filter($allRoles, fn($r) => $this->isBasicRole($r));
+            return array_values(array_filter($allRoles, fn($r) => $this->isBasicRole($r)));
         }
         
         return [];
@@ -44,7 +47,6 @@ class UserController extends Controller
 
     public function index()
     {
-        // ✅ Ganti hasAccess() dengan cara standar
         $user = auth()->user();
         if (!$user || !in_array($user->role, ['admin', 'manager'])) {
             abort(403, 'Akses ditolak. Khusus Admin & Manager.');
@@ -58,15 +60,12 @@ class UserController extends Controller
     {
         $user = auth()->user();
         
-        // Hanya Admin yang boleh create user
         if (!$user || $user->role !== 'admin') {
             abort(403, 'Akses ditolak.');
         }
 
-        // Validasi role: hanya yang diizinkan untuk admin
-        $allowedRoles = array_keys(config('roles.list', []));
-        $allowedRoles[] = 'manager'; // Admin bisa buat manager
-        // Note: Admin TIDAK boleh buat admin lain via form ini (opsional, bisa ditambah jika perlu)
+        // Dapatkan role yang boleh di-assign (untuk create, targetRole = null)
+        $allowedRoles = $this->getAssignableRoles($user->role, null);
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -98,9 +97,9 @@ class UserController extends Controller
             return back()->with('error', 'Anda tidak dapat mengubah role akun Anda sendiri.');
         }
 
-        // 2. Permission Check: Siapa boleh edit siapa?
+        // 2. Permission Check
         if ($editor->role === 'admin') {
-            // Admin TIDAK boleh edit admin lain (opsional, bisa di-enable jika perlu)
+            // Admin TIDAK boleh edit admin lain
             if ($target->role === 'admin') {
                 return back()->with('error', 'Admin tidak dapat mengubah role admin lain.');
             }
@@ -115,7 +114,7 @@ class UserController extends Controller
             abort(403, 'Akses ditolak.');
         }
 
-        // 3. VALIDASI AMAN: Hanya role yang diizinkan oleh permission
+        // 3. VALIDASI AMAN: Gunakan target->role yang sudah ada
         $assignableRoles = $this->getAssignableRoles($editor->role, $target->role);
         
         $request->validate([
@@ -134,7 +133,6 @@ class UserController extends Controller
         
         if (!$editor) return redirect()->route('login');
 
-        // Cegah hapus diri sendiri
         if ($target->id === $editor->id) {
             return back()->with('error', 'Tidak dapat menghapus akun sendiri.');
         }
@@ -142,11 +140,6 @@ class UserController extends Controller
         // Manager TIDAK boleh hapus Admin/Manager
         if ($editor->role === 'manager' && !$this->isBasicRole($target->role)) {
             return back()->with('error', 'Manager tidak dapat menghapus akun Admin/Manager.');
-        }
-        
-        // Optional: Admin tidak boleh hapus admin lain (uncomment jika perlu)
-        if ($editor->role === 'admin' && $target->role === 'admin') {
-            return back()->with('error', 'Admin tidak dapat menghapus admin lain.');
         }
 
         $target->delete();

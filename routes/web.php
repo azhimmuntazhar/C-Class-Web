@@ -97,7 +97,7 @@ Route::middleware('auth')->group(function () {
 
     // 2. ROUTE TASKS (CRUD Lengkap)
     Route::resource('tasks', \App\Http\Controllers\TaskController::class)
-        ->only(['index', 'create', 'store', 'destroy']);
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
     Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.doksli');
     Route::get('/gallery/create', [GalleryController::class, 'create'])->name('gallery.createdoksli');
