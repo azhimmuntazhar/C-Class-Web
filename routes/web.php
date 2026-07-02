@@ -103,6 +103,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/gallery/create', [GalleryController::class, 'create'])->name('gallery.createdoksli');
     Route::post('/gallery', [GalleryController::class, 'store'])->name('gallery.store');
 
+    Route::get('/dashboard/gallery', function () {
+        $user = auth()->user();
+        
+        // Hanya Admin & Manager yang bisa akses
+        if (!in_array($user->role, ['admin', 'manager'])) {
+            abort(403, 'Akses ditolak. Halaman ini hanya untuk Admin dan Manager.');
+        }
+        
+        $galleries = \App\Models\Gallery::latest()->get();
+        return view('dashboard.gallery', compact('galleries'));
+    })->name('dashboard.gallery');
+
     // 4. ROUTE PROFILE (Bawaan Breeze - Tetap dipertahankan)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
