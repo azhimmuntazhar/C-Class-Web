@@ -57,23 +57,56 @@ Route::get('/dashboard', function () {
         
         return view('dashboard.admin', compact('totalUsers', 'totalTasks', 'activeTasks', 'latestUsers'));
         
-    } elseif ($user->role === 'manager') {
-        // === MANAGER VIEW ===
-        // Manager bisa lihat semua tugas dari basic_roles (Ketua)
+    }elseif ($user->role === 'manager') {
+        // === MANAGER DASHBOARD ===
         $basicRoles = config('roles.basic_roles');
         
-        $tasks = \App\Models\Task::with('user')
+        // ✅ Query utama: SEMUA tugas (tanpa filter role)
+        $allTasksQuery = \App\Models\Task::with('user');
+        
+        // Query khusus tugas dari Ketua (untuk statistik divisi)
+        $ketuaTasksQuery = (clone $allTasksQuery)
             ->whereIn('user_id', function($query) use ($basicRoles) {
                 $query->select('id')->from('users')->whereIn('role', $basicRoles);
-            })
+            });
+        
+        // 📊 Stats Overview (SEMUA tugas)
+        $totalTasks = (clone $allTasksQuery)->count();
+        $activeTasks = (clone $allTasksQuery)->where('deadline_at', '>', now())->count();
+        $expiredTasks = (clone $allTasksQuery)->where('deadline_at', '<=', now())->count();
+        
+        // 🆕 Tugas Terbaru (5 terakhir, SEMUA tugas)
+        $latestTasks = (clone $allTasksQuery)
             ->latest()
-            ->paginate(10);
-            
-        $activeCount = clone $tasks; // Clone query untuk count
-        $activeCount = $activeCount->where('deadline_at', '>', now())->count();
+            ->take(5)
+            ->get();
         
-        return view('dashboard.manager', compact('tasks', 'activeCount'));
+        // ⏰ Tugas Mendekati Deadline (5 terdekat, SEMUA tugas aktif)
+        $upcomingDeadlines = (clone $allTasksQuery)
+            ->where('deadline_at', '>', now())
+            ->orderBy('deadline_at', 'asc')
+            ->take(5)
+            ->get();
         
+        // 👥 Jumlah Ketua
+        $totalKetua = \App\Models\User::whereIn('role', $basicRoles)->count();
+        
+        // 🖼️ Foto Terbaru dari Gallery
+        $latestPhotos = \App\Models\Gallery::latest()->take(5)->get();
+        
+        // 📋 Semua tugas untuk tabel (paginate)
+        $tasks = (clone $allTasksQuery)->latest()->paginate(10);
+        
+        return view('dashboard.manager', compact(
+            'totalTasks',
+            'activeTasks',
+            'expiredTasks',
+            'latestTasks',
+            'upcomingDeadlines',
+            'totalKetua',
+            'latestPhotos',
+            'tasks'
+        ));
     } else {
         // === KETUA VIEW (Default) ===
         // Ketua hanya lihat tugas divisinya sendiri
