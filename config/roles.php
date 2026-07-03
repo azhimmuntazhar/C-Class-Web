@@ -3,6 +3,8 @@
 return [
     // Key (disimpan di DB) => Value (ditampilkan di UI)
     'list' => [
+        'admin' => 'Admin',
+        'manager' => 'Manager',
         'ketua_struktur_data'        => 'Ketua Struktur Data',
         'ketua_algo'                 => 'Ketua Algoritma dan Pemrograman',
         'ketua_jarkom'               => 'Ketua Jaringan Komputer',

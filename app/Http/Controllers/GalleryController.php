@@ -14,11 +14,10 @@ class GalleryController extends Controller
     private const MAX_HEIGHT = 1080;
     private const JPEG_QUALITY = 80;
     private const WEBP_QUALITY = 80;
-    
-    // ✅ Hanya izinkan format gambar
+
     private const ALLOWED_IMAGE_MIMES = ['jpeg', 'png', 'jpg', 'webp'];
     private const ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
-    
+
     private function getImageManager(): ImageManager
     {
         return new ImageManager(new Driver());
@@ -27,6 +26,7 @@ class GalleryController extends Controller
     public function index()
     {
         $galleries = Gallery::latest()->get();
+
         return view('gallery.doksli', compact('galleries'));
     }
 
@@ -35,24 +35,20 @@ class GalleryController extends Controller
         return view('gallery.createdoksli');
     }
 
-    /**
-     * ✅ Store dengan Validasi Ketat (Hanya Gambar)
-     */
     public function store(Request $request)
     {
         if (!in_array(auth()->user()->role, ['admin', 'manager'])) {
             abort(403, 'Akses ditolak.');
         }
 
-        // ✅ Validasi ketat: hanya gambar
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'image' => [
                 'required',
                 'file',
-                'mimes:' . implode(',', self::ALLOWED_IMAGE_EXTENSIONS), // Hanya jpg, jpeg, png, webp
-                'mimetypes:image/jpeg,image/png,image/jpg,image/webp', // Validasi MIME type
-                'max:5120', // Max 5MB
+                'mimes:' . implode(',', self::ALLOWED_IMAGE_EXTENSIONS),
+                'mimetypes:image/jpeg,image/png,image/jpg,image/webp',
+                'max:5120',
             ],
         ], [
             'image.mimes' => 'Hanya file gambar (JPG, PNG, WebP) yang diperbolehkan.',
@@ -60,7 +56,6 @@ class GalleryController extends Controller
             'image.max' => 'Ukuran gambar maksimal 5MB.',
         ]);
 
-        // ✅ Double check: pastikan bukan video
         $file = $request->file('image');
         if ($this->isVideoFile($file)) {
             return back()->withInput()->withErrors([
@@ -68,7 +63,6 @@ class GalleryController extends Controller
             ]);
         }
 
-        // Proses kompresi gambar
         $path = $this->compressAndStore($file);
 
         Gallery::create([
@@ -79,9 +73,6 @@ class GalleryController extends Controller
         return back()->with('success', 'Gambar berhasil diupload & dikompresi! 🎉');
     }
 
-    /**
-     * ✅ Store Public dengan Validasi Ketat
-     */
     public function storePublic(Request $request)
     {
         $validated = $request->validate([
@@ -100,7 +91,7 @@ class GalleryController extends Controller
         ]);
 
         $file = $request->file('image');
-        
+
         if ($this->isVideoFile($file)) {
             return redirect()->back()->withInput()->withErrors([
                 'image' => 'Upload video tidak diperbolehkan.'
@@ -132,15 +123,11 @@ class GalleryController extends Controller
         return redirect()->route('dashboard.gallery')->with('success', 'Gambar berhasil dihapus! 🗑️');
     }
 
-    /**
-     * 🔒 Helper: Cek apakah file adalah video
-     */
     private function isVideoFile($file): bool
     {
         $mimeType = $file->getMimeType();
         $extension = strtolower($file->getClientOriginalExtension());
-        
-        // Cek MIME type video
+
         $videoMimeTypes = [
             'video/mp4',
             'video/webm',
@@ -151,41 +138,37 @@ class GalleryController extends Controller
             'video/3gpp',
             'video/x-matroska',
         ];
-        
-        // Cek extension video
+
         $videoExtensions = ['mp4', 'webm', 'avi', 'mov', 'mkv', 'flv', 'wmv', '3gp', 'm4v'];
-        
+
         return in_array($mimeType, $videoMimeTypes) || in_array($extension, $videoExtensions);
     }
 
-    /**
-     * 🔧 Helper: Kompresi Gambar
-     */
     private function compressAndStore($image): string
     {
         $manager = $this->getImageManager();
         $img = $manager->read($image->getPathname());
-        
+
         $originalWidth = $img->width();
         $originalHeight = $img->height();
         $extension = strtolower($image->getClientOriginalExtension());
-        
+
         if ($originalWidth > self::MAX_WIDTH || $originalHeight > self::MAX_HEIGHT) {
             $img->scaleDown(self::MAX_WIDTH, self::MAX_HEIGHT);
         }
-        
+
         $filename = 'gallery_' . time() . '_' . uniqid() . '.' . $extension;
         $path = 'galleries/' . $filename;
-        
+
         $compressed = match($extension) {
             'jpg', 'jpeg' => $img->toJpeg(self::JPEG_QUALITY),
-            'png'         => $img->toPng(),
-            'webp'        => $img->toWebp(self::WEBP_QUALITY),
-            default       => $img->toJpeg(self::JPEG_QUALITY),
+            'png' => $img->toPng(),
+            'webp' => $img->toWebp(self::WEBP_QUALITY),
+            default => $img->toJpeg(self::JPEG_QUALITY),
         };
-        
+
         Storage::disk('public')->put($path, (string) $compressed);
-        
+
         return $path;
     }
 }

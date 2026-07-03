@@ -12,20 +12,17 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
-        /* Global Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: rgba(31,41,55,0.4); border-radius: 3px; }
         ::-webkit-scrollbar-thumb { background: rgba(75,85,99,0.8); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(107,114,128,1); }
         html { scrollbar-width: thin; scrollbar-color: rgba(75,85,99,0.8) rgba(31,41,55,0.4); }
-        
+
         html { scroll-behavior: smooth; }
-        
-        /* Sidebar Transitions */
+
         .sidebar { transition: transform 0.3s ease-in-out; }
         .sidebar-hidden { transform: translateX(-100%); }
-        
-        /* Nav Item Active Indicator */
+
         .nav-item.active {
             position: relative;
         }
@@ -39,24 +36,21 @@
             background-color: #10b981;
             border-radius: 9999px;
         }
-        
-        /* Content padding for sidebar */
-        .content-with-sidebar { 
+
+        .content-with-sidebar {
             margin-left: 0;
             padding-top: 0;
             transition: margin-left 0.3s ease-in-out, padding-top 0.3s ease-in-out;
         }
-        
-        /* Desktop: sidebar margin */
+
         @media (min-width: 768px) {
-            .content-with-sidebar { 
+            .content-with-sidebar {
                 margin-left: 16rem;
             }
         }
-        
-        /* Mobile: navbar padding */
+
         @media (max-width: 767px) {
-            .content-with-sidebar { 
+            .content-with-sidebar {
                 padding-top: 4rem;
             }
         }
@@ -66,7 +60,6 @@
 </head>
 <body class="bg-gray-800 text-white">
 
-<!-- 📱 MOBILE TOP NAVBAR -->
 <nav class="md:hidden fixed top-0 left-0 right-0 h-16 bg-gray-900/95 backdrop-blur-md border-b border-gray-700 z-40 flex items-center px-4">
     <div class="flex items-center gap-3">
         <button id="sidebarToggle" class="p-2 text-gray-300 hover:text-white focus:outline-none -ml-1">
@@ -82,10 +75,8 @@
     <div class="flex-1"></div>
 </nav>
 
-<!-- 📦 SIDEBAR -->
 <aside id="sidebar" class="sidebar sidebar-hidden fixed inset-y-0 left-0 w-64 bg-gray-900 border-r border-gray-700 z-50 flex flex-col">
     
-    <!-- Logo -->
     <div class="h-16 flex items-center px-6 border-b border-gray-700">
         <a href="{{ route('home') }}" class="flex items-center gap-2 text-xl font-bold">
             <span class="text-emerald-500 text-2xl">❯</span>
@@ -93,7 +84,6 @@
         </a>
     </div>
     
-    <!-- User Profile -->
     <a href="{{ route('profile.edit') }}" class="block hover:bg-gray-800/80 transition">
         <div class="p-4 border-b border-gray-700">
             <div class="flex items-center gap-3">
@@ -108,20 +98,17 @@
         </div>
     </a>
     
-    <!-- Navigation -->
     <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         @php
             $currentRoute = request()->route() ? request()->route()->getName() : '';
         @endphp
         
-        <!-- Dashboard -->
         <a href="{{ route('dashboard') }}" 
            class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ $currentRoute === 'dashboard' ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             Dashboard
         </a>
         
-        <!-- Tasks Section -->
         @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
             <a href="{{ route('tasks.index') }}" 
                class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'tasks.') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
@@ -136,7 +123,6 @@
             </a>
         @endif
         
-        <!-- ✅ Kelola Gallery (Admin & Manager Only) -->
         @if(in_array(auth()->user()->role, ['admin', 'manager']))
             <a href="{{ route('dashboard.gallery') }}" 
                class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'dashboard.gallery') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
@@ -147,23 +133,21 @@
             </a>
         @endif
         
-        <!-- Admin Only Section -->
         @if(auth()->user()->role === 'admin')
             <div class="pt-4 mt-4 border-t border-gray-700">
                 <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Admin</p>
-                <a href="{{ route('admin.users.index') }}" 
+                <a href="{{ route('dashboard.users') }}" 
                    class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'admin.users') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     Kelola User
                 </a>
             </div>
         @endif
-        <!-- Manager Only Section -->
         @if(auth()->user()->role === 'manager')
             <div class="pt-4 mt-4 border-t border-gray-700">
                 <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Manager</p>
-                <a href="{{ route('admin.users.index') }}" 
-                   class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'admin.users') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                <a href="{{ route('dashboard.users') }}" 
+                   class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'dashboard.users') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     Kelola User
                 </a>
@@ -172,14 +156,12 @@
         
     </nav>
     
-    <!-- Bottom Actions -->
     <div class="p-4 border-t border-gray-700 space-y-2">
         <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Kembali ke Home
         </a>
         
-        <!-- Logout -->
         <form method="POST" action="{{ route('logout') }}" class="w-full">
             @csrf
             <button type="submit" class="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:text-red-300 transition">
@@ -190,15 +172,12 @@
     </div>
 </aside>
 
-<!-- Mobile Overlay -->
 <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden backdrop-blur-sm"></div>
 
-<!-- 📦 MAIN CONTENT -->
 <main class="content-with-sidebar min-h-screen">
     @yield('content')
 </main>
 
-<!-- ⚙️ SCRIPTS -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
