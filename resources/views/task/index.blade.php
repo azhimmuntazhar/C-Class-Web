@@ -95,22 +95,25 @@
     <!-- Stats Cards (Admin & Manager Only) -->
     @if(in_array(auth()->user()->role, ['admin', 'manager']))
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        
+        <!-- Total Tugas (Selalu Netral) -->
         <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
             <p class="text-gray-400 text-xs uppercase">Total Tugas</p>
-            <p class="text-2xl font-bold text-white">{{ $tasks->count() }}</p>
+            <p class="text-2xl font-bold text-white mt-1">{{ $totalAll }}</p>
         </div>
-        <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
-            <p class="text-gray-400 text-xs uppercase">Tugas Aktif</p>
-            <p class="text-2xl font-bold text-emerald-400">
-                {{ $tasks->filter(fn($t) => !$t->is_expired)->count() }}
-            </p>
+        
+        <!-- Tugas Aktif (Berubah Background jika filter 'active' aktif) -->
+        <div class="p-4 rounded-xl border transition-all duration-300 {{ $status === 'active' ? 'bg-emerald-900/40 border-emerald-700/50' : 'bg-gray-700/60 border-gray-600' }}">
+            <p class="{{ $status === 'active' ? 'text-emerald-200/80' : 'text-gray-400' }} text-xs uppercase transition-colors duration-300">Tugas Aktif</p>
+            <p class="text-2xl font-bold text-emerald-400 mt-1">{{ $totalActive }}</p>
         </div>
-        <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
-            <p class="text-gray-400 text-xs uppercase">Terlewat</p>
-            <p class="text-2xl font-bold text-red-400">
-                {{ $tasks->filter(fn($t) => $t->is_expired)->count() }}
-            </p>
+        
+        <!-- Terlewat (Berubah Background jika filter 'expired' aktif) -->
+        <div class="p-4 rounded-xl border transition-all duration-300 {{ $status === 'expired' ? 'bg-red-900/40 border-red-700/50' : 'bg-gray-700/60 border-gray-600' }}">
+            <p class="{{ $status === 'expired' ? 'text-red-200/80' : 'text-gray-400' }} text-xs uppercase transition-colors duration-300">Terlewat</p>
+            <p class="text-2xl font-bold text-red-400 mt-1">{{ $totalExpired }}</p>
         </div>
+
     </div>
     @endif
 

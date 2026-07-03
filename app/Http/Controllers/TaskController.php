@@ -14,29 +14,41 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $status = $request->get('status', 'active'); // ✅ TAMBAHKAN: Default 'active'
+        $status = $request->get('status', 'active');
         
-        $query = Task::with('user');
-
-        // 1. Filter berdasarkan role
-        if ($user->role === 'admin' || $user->role === 'manager') {
-            // Admin & Manager: lihat semua tugas
-        } else {
-            // Ketua: hanya lihat tugas divisinya
+        // ✅ BASE QUERY (tanpa filter status, untuk stats)
+        $baseQuery = Task::with('user');
+        
+        // Filter role
+        if (!in_array($user->role, ['admin', 'manager'])) {
             $courseKey = config("roles.course_mapping.{$user->role}");
-            $query->where('course_key', $courseKey);
+            $baseQuery->where('course_key', $courseKey);
         }
-
-        // 2. ✅ TAMBAHKAN: Filter berdasarkan status deadline
+        
+        // ✅ STATS: Hitung dari SEMUA tugas (tanpa filter status)
+        $totalAll = (clone $baseQuery)->count();
+        $totalActive = (clone $baseQuery)->where('deadline_at', '>', now())->count();
+        $totalExpired = (clone $baseQuery)->where('deadline_at', '<=', now())->count();
+        
+        // ✅ TABEL: Filter berdasarkan status yang dipilih
+        $query = clone $baseQuery;
+        
         if ($status === 'expired') {
             $query->where('deadline_at', '<=', now());
         } else {
             $query->where('deadline_at', '>', now());
         }
-
+        
         $tasks = $query->latest()->get();
-
-        return view('task.index', compact('tasks'));
+        
+        // ✅ Kirim semua data ke view
+        return view('task.index', compact(
+            'tasks',
+            'status',
+            'totalAll',
+            'totalActive',
+            'totalExpired'
+        ));
     }
 
     /**
