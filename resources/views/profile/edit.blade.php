@@ -131,7 +131,7 @@
             <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-gray-700 shadow-sm">
                 <h2 class="text-xl font-semibold text-white mb-4">Update Profile Information</h2>
                 <form method="POST" action="{{ route('profile.update') }}">
-                    @csrf @method('PUT')
+                    @csrf @method('patch')
                     
                     <div class="mb-4">
                         <label class="block text-gray-300 mb-2 text-sm font-medium">Name</label>
@@ -158,7 +158,7 @@
                 <h2 class="text-xl font-semibold text-white mb-4">Update Password</h2>
                 <form method="POST" action="{{ route('password.update') }}">
                     @csrf @method('PUT')
-                    
+
                     <div class="mb-4">
                         <label class="block text-gray-300 mb-2 text-sm font-medium">Current Password</label>
                         <input type="password" name="current_password" required autocomplete="current-password"
@@ -275,10 +275,15 @@
 
         // SweetAlert: Success Message (Breeze uses session('status'))
         @if (session('status'))
+            @php
+                $statusMessage = session('status') === 'password-updated' 
+                    ? 'Password berhasil diupdate!' 
+                    : 'Profile berhasil diupdate!';
+            @endphp
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
-                text: '{{ session('status') }}',
+                text: '{{ $statusMessage }}',
                 timer: 3000,
                 showConfirmButton: false,
                 position: 'top-end',
