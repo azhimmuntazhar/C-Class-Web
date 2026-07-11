@@ -45,18 +45,21 @@ class TaskController extends Controller
 
     public function publicIndex(Request $request)
     {
-        $status = $request->query('status', 'active');
+        $status = $request->get('status', 'active');
+        
+        // Tugas terfilter untuk sidebar
         $query = Task::with('user');
-
         if ($status === 'expired') {
             $query->where('deadline_at', '<=', now());
         } else {
             $query->where('deadline_at', '>', now());
         }
-
-        $tasks = $query->latest()->get();
-
-        return view('tasks.public', compact('tasks', 'status'));
+        $tasks = $query->orderBy('deadline_at', 'asc')->get();
+        
+        // ✅ SEMUA tugas untuk kalender (tanpa filter status)
+        $allTasks = Task::with('user')->get();
+        
+        return view('tasks.public', compact('tasks', 'allTasks', 'status'));
     }
 
     public function create()
