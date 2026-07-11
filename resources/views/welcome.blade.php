@@ -289,6 +289,62 @@
             </div>
 
             <div class="bg-gray-800 rounded-2xl shadow-sm border border-gray-600 p-6 animate-slide-up delay-4">
+                @if(isset($announcements) && $announcements->count() > 0)
+                <div class="mb-10 animate-slide-up delay-3">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                            <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
+                            </svg>
+                            Pengumuman Terbaru
+                        </h2>
+                        <span class="text-xs text-gray-500">{{ $announcements->count() }} pengumuman</span>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        @foreach($announcements as $announcement)
+                        <div class="bg-gradient-to-r from-orange-900/30 to-gray-800/60 rounded-xl border border-orange-700/30 p-5 hover:border-orange-600/50 transition group">
+                            <div class="flex items-start gap-4">
+                                <!-- Icon -->
+                                <div class="w-10 h-10 rounded-lg bg-orange-600/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
+                                    <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
+                                    </svg>
+                                </div>
+                                
+                                <!-- Content -->
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                                        <h3 class="text-white font-semibold text-lg">{{ $announcement->title }}</h3>
+                                        <span class="px-2 py-0.5 bg-orange-600/30 text-orange-300 text-xs font-medium rounded-full border border-orange-600/50">
+                                            Baru
+                                        </span>
+                                    </div>
+                                    
+                                    <p class="text-gray-300 text-sm mb-3 whitespace-pre-wrap line-clamp-3">{{ $announcement->content }}</p>
+                                    
+                                    <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+                                        <span class="flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                            </svg>
+                                            {{ $announcement->user->name }}
+                                            <span class="text-orange-400/80">• {{ config('roles.list.' . $announcement->user->role) ?? ucfirst($announcement->user->role) }}</span>
+                                        </span>
+                                        <span class="flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            {{ $announcement->created_at->format('d M Y') }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
                 <div class="flex items-center justify-between mb-3">
                     <h2 class="text-xl font-bold text-white">Aktivitas Terbaru</h2>
                     <a href="{{ route('tasks.public') }}" class="text-sm text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">

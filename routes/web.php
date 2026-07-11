@@ -16,7 +16,9 @@ Route::get('/', function () {
         ->limit(5)
         ->get();
 
-    return view('welcome', compact('totalDoksli', 'totalActiveTasks', 'latestTasks'));
+    $announcements = \App\Http\Controllers\AnnouncementController::getActiveForPublic();
+
+    return view('welcome', compact('totalDoksli', 'totalActiveTasks', 'latestTasks', 'announcements'));
 })->name('home');
 
 Route::get('/galeri', function () {
@@ -115,6 +117,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/reports', [\App\Http\Controllers\ReportController::class, 'adminIndex'])->name('dashboard.reports');
     Route::patch('/dashboard/reports/{report}/status', [\App\Http\Controllers\ReportController::class, 'updateStatus'])->name('dashboard.reports.updateStatus');
     Route::delete('/dashboard/reports/{report}', [\App\Http\Controllers\ReportController::class, 'destroy'])->name('dashboard.reports.destroy');
+
+    Route::get('/dashboard/announcements', [\App\Http\Controllers\AnnouncementController::class, 'index'])->name('dashboard.announcements');
+    Route::post('/dashboard/announcements', [\App\Http\Controllers\AnnouncementController::class, 'store'])->name('dashboard.announcements.store');
+    Route::patch('/dashboard/announcements/{announcement}', [\App\Http\Controllers\AnnouncementController::class, 'update'])->name('dashboard.announcements.update');
+    Route::patch('/dashboard/announcements/{announcement}/archive', [\App\Http\Controllers\AnnouncementController::class, 'archive'])->name('dashboard.announcements.archive');
+    Route::delete('/dashboard/announcements/{announcement}', [\App\Http\Controllers\AnnouncementController::class, 'destroy'])->name('dashboard.announcements.destroy');
+
 });
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
