@@ -194,7 +194,7 @@
         </button>
 
         <div class="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center">
-            <img id="lightboxImg" src="" alt="" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
+            <img id="lightboxImg" src="" alt="" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl" loading="lazy">
 
             <div class="mt-4 text-center">
                 <h3 id="lightboxTitle" class="text-white font-semibold text-lg"></h3>

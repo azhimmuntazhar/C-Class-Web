@@ -241,7 +241,7 @@
                         
                         <!-- Preview State -->
                         <div id="uploadPreview" class="hidden">
-                            <img id="imagePreview" class="max-h-48 mx-auto rounded-lg mb-3 object-contain" src="" alt="Preview">
+                            <img id="imagePreview" class="max-h-48 mx-auto rounded-lg mb-3 object-contain" src="" alt="Preview" loading="lazy">
                             <p id="fileName" class="text-gray-300 text-sm font-medium"></p>
                             <p id="fileSize" class="text-gray-500 text-xs mt-1"></p>
                         </div>
@@ -280,7 +280,7 @@
     
     <!-- Image -->
     <div class="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center">
-        <img id="lightboxImg" src="" alt="" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
+        <img id="lightboxImg" src="" alt="" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl" loading="lazy">
         
         <!-- Caption -->
         <div class="mt-4 text-center">

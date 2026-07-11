@@ -112,6 +112,7 @@
                     <div class="md:w-48 flex-shrink-0">
                         <img src="{{ asset('storage/' . $report->image) }}" 
                              alt="{{ $report->title }}"
+                             loading="lazy"
                              class="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition"
                              onclick="window.open('{{ asset('storage/' . $report->image) }}', '_blank')">
                     </div>

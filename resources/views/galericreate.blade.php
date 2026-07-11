@@ -138,7 +138,7 @@
                                     </label>
                                 </div>
                                 <div id="previewContainer" class="mt-4 hidden">
-                                    <img id="imagePreview" class="w-32 h-32 object-cover rounded-lg border border-gray-200 mx-auto">
+                                    <img id="imagePreview" class="w-32 h-32 object-cover rounded-lg border border-gray-200 mx-auto" loading="lazy">
                                 </div>
                                 @error('image')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>

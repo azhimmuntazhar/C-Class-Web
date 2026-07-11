@@ -115,7 +115,7 @@
                     @if($announcement->hasImage())
                     <div class="mb-3">
                         <img src="{{ asset('storage/' . $announcement->image) }}" 
-                             alt="{{ $announcement->title }}"
+                             alt="{{ $announcement->title }}" loading="lazy"
                              class="w-full max-h-64 object-cover rounded-lg cursor-pointer hover:opacity-90 transition"
                              onclick="window.open('{{ asset('storage/' . $announcement->image) }}', '_blank')">
                     </div>
@@ -236,7 +236,7 @@
                             <p class="text-gray-500 text-xs mt-1">JPG, PNG, WEBP</p>
                         </div>
                         <div id="uploadPreview" class="hidden">
-                            <img id="previewImg" class="max-h-40 mx-auto rounded-lg mb-2 object-contain" src="" alt="Preview">
+                            <img id="previewImg" class="max-h-40 mx-auto rounded-lg mb-2 object-contain" src="" alt="Preview" loading="lazy">
                             <p id="previewName" class="text-gray-300 text-sm font-medium"></p>
                             <button type="button" onclick="event.stopPropagation(); removeImage()" class="mt-2 text-xs text-red-400 hover:text-red-300">✕ Hapus gambar</button>
                         </div>

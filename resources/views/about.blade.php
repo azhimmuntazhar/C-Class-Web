@@ -486,7 +486,7 @@
                         
                         <!-- Preview State -->
                         <div id="imagePreview" class="hidden">
-                            <img id="previewImg" class="max-h-32 sm:max-h-48 mx-auto rounded-lg mb-2 object-contain" src="" alt="Preview">
+                            <img id="previewImg" class="max-h-32 sm:max-h-48 mx-auto rounded-lg mb-2 object-contain" src="" alt="Preview" loading="lazy">
                             <p id="previewFileName" class="text-gray-300 text-xs sm:text-sm font-medium truncate"></p>
                             <p id="previewFileSize" class="text-gray-500 text-xs mt-1"></p>
                             <button type="button" onclick="event.stopPropagation(); removeImage()" 

@@ -115,7 +115,7 @@
                             <!-- Gambar -->
                             <div class="aspect-square overflow-hidden bg-gray-50 relative">
                                 <img src="{{ asset('storage/' . $item->image) }}" 
-                                    alt="{{ $item->title }}"
+                                    alt="{{ $item->title }}" loading="lazy"
                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                                 
                                 <!-- Overlay saat hover -->
