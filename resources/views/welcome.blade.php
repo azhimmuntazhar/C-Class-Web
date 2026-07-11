@@ -66,8 +66,8 @@
         }
 
         ::-webkit-scrollbar {
-            width: 0;
-            height: 0;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
             background: rgba(31, 41, 55, 0.4);
@@ -96,8 +96,6 @@
             transform-origin: right; transition: transform 0.3s ease-in-out;
         }
         .nav-underline:hover::after { transform: scaleX(1); transform-origin: left; }
-        html { scroll-behavior: smooth; }
-        body { padding-top: 72px; }
 
         @keyframes underline-slide {
             from { transform: scaleX(0); transform-origin: left; }
@@ -162,6 +160,96 @@
 
         #taskModal .overflow-y-auto {
             -webkit-overflow-scrolling: touch;
+        }
+
+        .grid-pattern {
+            position: relative;
+        }
+        .grid-pattern::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glass-card {
+            background: rgba(55, 65, 81, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .animated-border {
+            position: relative;
+            overflow: hidden;
+        }
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 2px;
+            background: linear-gradient(45deg, #10b981, #3b82f6, #8b5cf6, #10b981);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: border-gradient 3s ease infinite;
+        }
+        .animated-border:hover::before {
+            opacity: 1;
+        }
+        @keyframes border-gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .task-slide {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .task-slide:hover {
+            transform: translateX(8px);
+            border-left: 3px solid #10b981;
+            padding-left: calc(1.25rem - 3px);
+        }
+
+        .gradient-shift {
+            position: relative;
+            overflow: hidden;
+        }
+        .gradient-shift::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, #10b981, #3b82f6, #8b5cf6, #10b981);
+            background-size: 400% 400%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: gradient-move 8s ease infinite;
+            z-index: -1;
+        }
+        .gradient-shift:hover::before {
+            opacity: 1;
+        }
+        @keyframes gradient-move {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .icon-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .icon-hover:hover {
+            transform: scale(1.15) rotate(5deg);
         }
     </style>
     
@@ -233,8 +321,8 @@
         </div>
     </div>
 
-    <main class="min-h-screen bg-gray-800">
-        <div class="max-w-6xl mx-auto px-4 py-10 w-full">
+    <main class="min-h-screen bg-gray-800 grid-pattern">
+        <div class="relative max-w-6xl mx-auto px-4 py-10 w-full z-10">
             
             <div class="text-center mb-12 mt-20 animate-slide-up delay-1">
                 <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">
@@ -247,7 +335,7 @@
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10 animate-slide-up delay-2">
                 <a href="{{ route('tasks.public') }}" 
-                class="group flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-all duration-200 shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5">
+                class="gradient-shift group flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-all duration-200 shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                     </svg>
@@ -255,7 +343,7 @@
                 </a>
                 
                 <a href="{{ route('galeri') }}" 
-                class="group flex items-center justify-center gap-2 px-6 py-3 bg-gray-700/60 hover:bg-gray-600 text-white font-medium rounded-xl transition-all duration-200 border border-gray-600 hover:border-gray-500 shadow-lg hover:-translate-y-0.5">
+                class="gradient-shift group flex items-center justify-center gap-2 px-6 py-3 bg-gray-700/60 hover:bg-gray-600 text-white font-medium rounded-xl transition-all duration-200 border border-gray-600 hover:border-gray-500 shadow-lg hover:-translate-y-0.5">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
@@ -264,23 +352,23 @@
             </div>
 
             <div class="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-slide-up delay-3">
-                <div onClick="window.location.href='{{ route('tasks.public') }}'" class="bg-gray-700/60 p-6 rounded-2xl border border-gray-600 shadow-sm hover:border-emerald-500/50 transition">
-                    <div class="text-emerald-500 mb-2">
+                <div onClick="window.location.href='{{ route('tasks.public') }}'" class="glass-card animated-border p-6 rounded-2xl shadow-sm hover:shadow-emerald-500/20 transition cursor-pointer group">
+                    <div class="icon-hover text-emerald-500 mb-2 inline-block">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                     </div>
                     <h3 class="text-white font-semibold text-lg">Total Tugas Aktif</h3>
                     <p class="text-3xl font-bold text-white mt-1">{{ $totalActiveTasks ?? 0 }}</p>
                     <p class="text-xs text-gray-500 mt-1">Dari total {{ \App\Models\Task::count() ?? 0 }} tugas</p>
                 </div>
-                <div onClick="window.location.href='{{ route('galeri') }}'" class="bg-gray-700/60 p-6 rounded-2xl border border-gray-600 shadow-sm hover:border-emerald-500/50 transition">
-                    <div class="text-blue-500 mb-2">
+                <div onClick="window.location.href='{{ route('galeri') }}'" class="glass-card animated-border p-6 rounded-2xl shadow-sm hover:shadow-blue-500/20 transition cursor-pointer group">
+                    <div class="icon-hover text-blue-500 mb-2 inline-block">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
                     <h3 class="text-white font-semibold text-lg">Doksli Terkumpul</h3>
                     <p class="text-3xl font-bold text-white mt-1">{{ $totalDoksli ?? 0 }}</p>
                 </div>
-                <div class="bg-gray-700/60 p-6 rounded-2xl border border-gray-600 shadow-sm hover:border-emerald-500/50 transition">
-                    <div class="text-purple-500 mb-2">
+                <div class="glass-card animated-border p-6 rounded-2xl shadow-sm hover:shadow-purple-500/20 transition group">
+                    <div class="icon-hover text-purple-500 mb-2 inline-block">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </div>
                     <h3 class="text-white font-semibold text-lg">Member</h3>
@@ -288,7 +376,7 @@
                 </div>
             </div>
 
-            <div class="bg-gray-800 rounded-2xl shadow-sm border border-gray-600 p-6 animate-slide-up delay-4">
+            <div class="glass-card rounded-2xl shadow-sm p-6 animate-slide-up delay-4">
                 @if(isset($announcements) && $announcements->count() > 0)
                 <div class="mb-10 animate-slide-up delay-3">
                     <div class="flex items-center justify-between mb-4">
@@ -355,7 +443,7 @@
                     <div class="space-y-4">
                         @foreach($latestTasks as $index => $task)
                         <div onclick="openTaskModal({{ $task->id }})" 
-                            class="bg-gray-700/60 rounded-xl border border-gray-600 p-5 hover:border-emerald-500/40 hover:bg-gray-800 group cursor-pointer animate-slide-up"
+                            class="task-slide glass-card rounded-xl border border-gray-600/50 p-5 hover:border-emerald-500/40 group cursor-pointer animate-slide-up"
                             style="transition-delay: {{ 0.5 + ($index * 0.1) }}s">
                             
                             <div class="flex items-center gap-2 mb-3 flex-wrap">
@@ -589,7 +677,7 @@
 
             const categoryEl = document.getElementById('modalCategory');
             categoryEl.className = `px-2.5 py-1 rounded-full text-xs font-medium border ${task.category === 'kelompok' ? 'bg-blue-900/30 text-blue-400 border-blue-800/30' : 'bg-purple-900/30 text-purple-400 border-purple-800/30'}`;
-            categoryEl.innerHTML = task.category === 'kelompok' ? '<span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 1₀a2 2 ₀ 11-4 ₀ 2 2 ₀ ₀14 ₀z"></path></svg><span>Kelompok</span></span>' : '<span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="₀ ₀₂₄₂₄"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="₂" d="M₁₆₇a₄₄₀₁₁-8₀₁₁₈₀zM₁₂₁₄a₇₇₀₀₋₇₁₄a₇₇₀₀₋₇z"></path></svg><span>Individu</span></span>';
+            categoryEl.innerHTML = task.category === 'kelompok' ? '<span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg><span>Kelompok</span></span>' : '<span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg><span>Individu</span></span>';
 
             const linksContainer = document.getElementById('modalLinks');
             linksContainer.innerHTML = '<h4 class="text-sm font-semibold text-gray-300 mb-2">Link Terkait</h4>';
