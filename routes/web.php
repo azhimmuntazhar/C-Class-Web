@@ -37,6 +37,8 @@ Route::get('/about', function () {
 
 Route::get('/tugas', [TaskController::class, 'publicIndex'])->name('tasks.public');
 
+Route::post('/reports', [\App\Http\Controllers\ReportController::class, 'store'])->name('reports.store');
+
 Route::get('/dashboard', function () {
     $user = auth()->user();
 
@@ -109,6 +111,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/dashboard/reports', [\App\Http\Controllers\ReportController::class, 'adminIndex'])->name('dashboard.reports');
+    Route::patch('/dashboard/reports/{report}/status', [\App\Http\Controllers\ReportController::class, 'updateStatus'])->name('dashboard.reports.updateStatus');
+    Route::delete('/dashboard/reports/{report}', [\App\Http\Controllers\ReportController::class, 'destroy'])->name('dashboard.reports.destroy');
 });
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {

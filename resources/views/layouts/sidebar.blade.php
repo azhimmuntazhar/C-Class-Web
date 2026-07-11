@@ -137,19 +137,46 @@
             <div class="pt-4 mt-4 border-t border-gray-700">
                 <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Admin</p>
                 <a href="{{ route('dashboard.users') }}" 
-                   class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'admin.users') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'dashboard.users') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     Kelola User
                 </a>
+                <a href="{{ route('dashboard.reports') }}" 
+                class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'dashboard.reports') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Laporan
+                    @php
+                        $newReportsCount = \App\Models\Report::where('status', 'baru')->count();
+                    @endphp
+                    @if($newReportsCount > 0)
+                        <span class="ml-auto px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded-full">
+                            {{ $newReportsCount }}
+                        </span>
+                    @endif
+                </a>
             </div>
         @endif
+
         @if(auth()->user()->role === 'manager')
             <div class="pt-4 mt-4 border-t border-gray-700">
                 <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Manager</p>
                 <a href="{{ route('dashboard.users') }}" 
-                   class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'dashboard.users') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'dashboard.users') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     Kelola User
+                </a>
+                <a href="{{ route('dashboard.reports') }}" 
+                class="nav-item flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ str_contains($currentRoute, 'dashboard.reports') ? 'bg-gray-800 text-white active' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Laporan
+                    @php
+                        $newReportsCount = \App\Models\Report::where('status', 'baru')->count();
+                    @endphp
+                    @if($newReportsCount > 0)
+                        <span class="ml-auto px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded-full">
+                            {{ $newReportsCount }}
+                        </span>
+                    @endif
                 </a>
             </div>
         @endif

@@ -357,5 +357,274 @@
             });
         @endif
     </script>
+
+    <button onclick="openReportModal()" 
+            id="floatingReportBtn"
+            class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group flex items-center gap-2 px-3 py-2.5 sm:px-5 sm:py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium rounded-full shadow-2xl hover:shadow-emerald-500/50 transition-all duration-300 hover:scale-105 active:scale-95">
+        
+        <!-- Pulse Ring -->
+        <span class="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-20"></span>
+        
+        <!-- Icon Only on Mobile -->
+        <svg class="w-5 h-5 sm:w-5 sm:h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+        </svg>
+        
+        <!-- Text Only on Desktop -->
+        <span class="relative z-10 text-xs sm:text-sm hidden sm:inline">Kirim Masukan</span>
+    </button>
+
+    <div id="reportModal" class="fixed inset-0 z-[100] hidden items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-0 sm:p-4 transition-opacity">
+        <div class="bg-gray-800 rounded-t-2xl sm:rounded-2xl border-t sm:border border-gray-700 w-full sm:max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all">
+            
+            <!-- Modal Header (Sticky di Mobile) -->
+            <div class="sticky top-0 bg-gray-800 border-b border-gray-700 p-4 sm:p-6 flex justify-between items-start z-10">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-900/40 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold text-white">Kirim Masukan</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 mt-1">Bantu kami meningkatkan platform ini</p>
+                    </div>
+                </div>
+                <button onclick="closeReportModal()" class="text-gray-400 hover:text-white transition p-1 hover:bg-gray-700 rounded-lg">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <form id="reportForm" action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data" class="p-4 sm:p-6 space-y-4 sm:space-y-5">
+                @csrf
+                
+                <!-- Category Selection (Stack di Mobile Sangat Kecil) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-3">
+                        Kategori Laporan <span class="text-red-400">*</span>
+                    </label>
+                    <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                        <!-- Saran -->
+                        <label class="cursor-pointer">
+                            <input type="radio" name="category" value="saran" checked class="peer sr-only">
+                            <div class="p-3 sm:p-4 bg-gray-700 border-2 border-gray-600 rounded-xl peer-checked:border-emerald-500 peer-checked:bg-emerald-900/20 transition hover:border-gray-500">
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-emerald-900/40 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-medium text-sm sm:text-base">Saran</p>
+                                        <p class="text-xs text-gray-400 hidden sm:block">Ide & perbaikan</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <!-- Bug -->
+                        <label class="cursor-pointer">
+                            <input type="radio" name="category" value="bug" class="peer sr-only">
+                            <div class="p-3 sm:p-4 bg-gray-700 border-2 border-gray-600 rounded-xl peer-checked:border-red-500 peer-checked:bg-red-900/20 transition hover:border-gray-500">
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-red-900/40 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-medium text-sm sm:text-base">Bug</p>
+                                        <p class="text-xs text-gray-400 hidden sm:block">Laporan masalah</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Title -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Judul Singkat <span class="text-red-400">*</span>
+                    </label>
+                    <input type="text" name="title" required maxlength="255"
+                        class="w-full px-3 sm:px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                        placeholder="Contoh: Fitur dark mode tidak bekerja">
+                    @error('title') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Deskripsi Lengkap <span class="text-red-400">*</span>
+                    </label>
+                    <textarea name="description" rows="4" sm:rows="5" required minlength="10"
+                            class="w-full px-3 sm:px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition resize-none"
+                            placeholder="Jelaskan detail saran atau bug yang Anda temukan..."></textarea>
+                    @error('description') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                
+                <!-- Image Upload -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Gambar Pendukung <span class="text-gray-500 text-xs">(Opsional, max 2MB)</span>
+                    </label>
+                    <div id="imageUploadZone" class="border-2 border-dashed border-gray-600 rounded-xl p-4 sm:p-6 text-center cursor-pointer hover:border-emerald-500/50 transition"
+                        onclick="document.getElementById('reportImage').click()">
+                        
+                        <!-- Default State -->
+                        <div id="imageDefault">
+                            <svg class="w-8 h-8 sm:w-10 sm:h-10 mx-auto text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <p class="text-gray-400 text-xs sm:text-sm">Klik untuk upload screenshot</p>
+                            <p class="text-gray-500 text-xs mt-1 hidden sm:block">PNG, JPG, WEBP (Max 2MB)</p>
+                        </div>
+                        
+                        <!-- Preview State -->
+                        <div id="imagePreview" class="hidden">
+                            <img id="previewImg" class="max-h-32 sm:max-h-48 mx-auto rounded-lg mb-2 object-contain" src="" alt="Preview">
+                            <p id="previewFileName" class="text-gray-300 text-xs sm:text-sm font-medium truncate"></p>
+                            <p id="previewFileSize" class="text-gray-500 text-xs mt-1"></p>
+                            <button type="button" onclick="event.stopPropagation(); removeImage()" 
+                                    class="mt-2 text-xs text-red-400 hover:text-red-300">
+                                ✕ Hapus gambar
+                            </button>
+                        </div>
+                    </div>
+                    <input type="file" name="image" id="reportImage" accept="image/*" class="hidden" onchange="previewImage(this)">
+                    @error('image') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                
+                <!-- Reporter Info -->
+                <div class="grid grid-cols-1 gap-3 sm:gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">
+                            Nama <span class="text-gray-500 text-xs">(Opsional)</span>
+                        </label>
+                        <input type="text" name="reporter_name" 
+                            value="{{ auth()->check() ? auth()->user()->name : old('reporter_name') }}"
+                            class="w-full px-3 sm:px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 outline-none transition"
+                            placeholder="Nama Anda">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">
+                            Email <span class="text-gray-500 text-xs">(Opsional)</span>
+                        </label>
+                        <input type="email" name="reporter_email" 
+                            value="{{ auth()->check() ? auth()->user()->email : old('reporter_email') }}"
+                            class="w-full px-3 sm:px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 outline-none transition"
+                            placeholder="email@example.com">
+                    </div>
+                </div>
+                
+                @auth
+                <div class="bg-emerald-900/20 rounded-lg p-3 border border-emerald-700/50 flex items-center gap-3">
+                    <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <p class="text-emerald-300 text-xs sm:text-sm">
+                        Anda login sebagai <strong>{{ auth()->user()->name }}</strong>
+                    </p>
+                </div>
+                @endauth
+                
+                <!-- Actions (Full Width di Mobile) -->
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
+                    <button type="button" onclick="closeReportModal()" 
+                            class="w-full sm:flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition">
+                        Batal
+                    </button>
+                    <button type="submit" 
+                            class="w-full sm:flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                        Kirim Laporan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Open/Close Modal
+        function openReportModal() {
+            const modal = document.getElementById('reportModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+        }
+        
+        function closeReportModal() {
+            const modal = document.getElementById('reportModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.classList.remove('overflow-hidden');
+            document.getElementById('reportForm').reset();
+            removeImage();
+        }
+        
+        // Image Preview
+        function previewImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            // Validate size
+            if (file.size > 2 * 1024 * 1024) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File Terlalu Besar',
+                    text: 'Ukuran maksimal 2MB',
+                    background: '#1f2937',
+                    color: '#fff'
+                });
+                input.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('previewFileName').textContent = file.name;
+                document.getElementById('previewFileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+                document.getElementById('imageDefault').classList.add('hidden');
+                document.getElementById('imagePreview').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function removeImage() {
+            document.getElementById('reportImage').value = '';
+            document.getElementById('imageDefault').classList.remove('hidden');
+            document.getElementById('imagePreview').classList.add('hidden');
+        }
+        
+        // Close modal on backdrop click
+        document.getElementById('reportModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'reportModal') closeReportModal();
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeReportModal();
+        });
+        
+        // Show success message if exists
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false,
+                background: '#1f2937',
+                color: '#fff'
+            });
+        @endif
+    </script>
 </body>
 </html>
