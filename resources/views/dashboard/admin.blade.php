@@ -67,7 +67,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         
         <!-- Manage Users -->
-        <a href="{{ route('admin.users.index') }}" class="group bg-gray-700/60 p-5 rounded-xl border border-gray-600 hover:border-emerald-500/50 hover:bg-gray-700 transition">
+        <a href="{{ route('dashboard.users') }}" class="group bg-gray-700/60 p-5 rounded-xl border border-gray-600 hover:border-emerald-500/50 hover:bg-gray-700 transition">
             <div class="flex items-start gap-4">
                 <div class="w-12 h-12 rounded-lg bg-purple-900/40 flex items-center justify-center flex-shrink-0">
                     <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
