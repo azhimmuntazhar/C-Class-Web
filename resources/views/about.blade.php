@@ -6,41 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>About Us - Informatika CFI</title>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
-        /* Global Scrollbar*/
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(31, 41, 55, 0.4); /* Match bg-gray-800/900 */
+            background: rgba(31, 41, 55, 0.4);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(75, 85, 99, 0.8); /* gray-600 + opacity */
+            background: rgba(75, 85, 99, 0.8);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(107, 114, 128, 1); /* gray-500 */
+            background: rgba(107, 114, 128, 1);
         }
 
-        /*  Firefox Support (Optional tapi disarankan) */
         html {
             scrollbar-width: thin;
             scrollbar-color: rgba(75, 85, 99, 0.8) rgba(31, 41, 55, 0.4);
         }
 
-        /* Smooth scroll & navbar padding (tetap pertahankan) */
         html { scroll-behavior: smooth; }
         body { padding-top: 72px; }
 
-        /* Animasi Underline (tetap pertahankan) */
         .nav-underline { position: relative; display: inline-block; }
         .nav-underline::after {
             content: ''; position: absolute; left: 0; bottom: -3px; width: 100%; height: 4px;
@@ -48,12 +42,9 @@
             transform-origin: right; transition: transform 0.3s ease-in-out;
         }
         .nav-underline:hover::after { transform: scaleX(1); transform-origin: left; }
-        /* Smooth scroll untuk anchor links */
         html { scroll-behavior: smooth; }
-        /* Mencegah konten tertutup navbar fixed */
         body { padding-top: 72px; } 
     
-        /* Animasi Underline Sliding */
         @keyframes underline-slide {
             from { transform: scaleX(0); transform-origin: left; }
             to { transform: scaleX(1); transform-origin: left; }
@@ -68,23 +59,21 @@
             content: '';
             position: absolute;
             left: 0;
-            bottom: -3px; /* Sesuaikan jarak underline dari teks */
+            bottom: -3px;
             width: 100%;
-            height: 4px; /* Ketebalan underline */
+            height: 4px;
             border-radius: 9999px;
-            background-color: #10b981; /* Warna emerald-500 */
+            background-color: #10b981;
             transform: scaleX(0);
             transform-origin: right;
             transition: transform 0.3s ease-in-out;
         }
         
-        /* Hover effect: underline slide dari kiri */
         .nav-underline:hover::after {
             transform: scaleX(1);
             transform-origin: left;
         }
         
-        /* Optional: animasi marquee tetap dipertahankan */
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -99,7 +88,6 @@
 </head>
 <body class="bg-gray-800 min-h-screen flex flex-col">
 
-    <!-- TOP NAVBAR (Fixed) -->
     <nav class="fixed top-0 left-0 right-0 h-16 bg-gray-800/80 backdrop-blur-md text-white shadow-lg z-50 flex items-center justify-between px-4 md:px-20 transition-all duration-300 border-b border-gray-700/50">
         <div class="flex items-center gap-4">
             <button id="sidebarToggle" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-1">
@@ -117,7 +105,6 @@
         </div>
     </nav>
 
-    <!-- MOBILE MENU -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
     <div id="mobileMenu" class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform -translate-x-full transition-transform duration-300 ease-in-out z-50 md:hidden flex flex-col">
         <div class="p-6 border-b border-gray-700 flex items-center justify-between">
@@ -133,7 +120,6 @@
             <a href="{{ route('about') }}" class="block px-4 py-3 rounded-lg hover:bg-gray-700 transition {{ request()->routeIs('about') ? 'bg-emerald-600' : '' }}">About</a>
         </div>
     </div>    
-    <!-- Mobile Menu Content -->
     <div id="mobileMenu" class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform -translate-x-full transition-transform duration-300 ease-in-out z-50 md:hidden flex flex-col">
         <div class="p-6 border-b border-gray-700 flex items-center justify-between">
             <span class="text-lg font-bold">Menu</span>
@@ -157,11 +143,9 @@
         </div>
     </div>
 
-    <!-- 📦 MAIN CONTENT -->
     <main class="flex-1">
         <div class="max-w-6xl mx-auto px-4 py-12 w-full">
             
-            <!-- Header Section -->
             <div class="text-center mb-10">
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
                     About <span class="text-emerald-500">Us!</span>
@@ -177,10 +161,8 @@
             <p class="text-gray-400 text-lg mx-auto mb-3">
                 <span class="text-emerald-500">❯</span><span class="text-gray-400"> Team Project</span>
             </p>
-            <!-- 👥 Team Members Grid (4 Orang) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                 
-                <!-- Member 1 -->
                 <div class="bg-gray-700/20 rounded-2xl p-6 border border-gray-600 shadow-sm hover:border-emerald-500/50 transition group text-center">
                     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
                         AD
@@ -198,7 +180,6 @@
                     </div>
                 </div>
 
-                <!-- Member 2 -->
                 <div class="bg-gray-700/20 rounded-2xl p-6 border border-gray-600 shadow-sm hover:border-emerald-500/50 transition group text-center">
                     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
                         RS
@@ -216,7 +197,6 @@
                     </div>
                 </div>
 
-                <!-- Member 3 -->
                 <div class="bg-gray-700/20 rounded-2xl p-6 border border-gray-600 shadow-sm hover:border-emerald-500/50 transition group text-center">
                     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
                         BK
@@ -234,7 +214,6 @@
                     </div>
                 </div>
 
-                <!-- Member 4 -->
                 <div class="bg-gray-700/20 rounded-2xl p-6 border border-gray-600 shadow-sm hover:border-emerald-500/50 transition group text-center">
                     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
                         DS
@@ -253,37 +232,30 @@
                 </div>
             </div>
 
-            <!-- 💻 Tech Stack Section -->
             <div class="bg-gray-700/20 rounded-2xl p-8 border border-gray-600 shadow-sm mb-20">
                 <h2 class="text-2xl font-bold text-white mb-6 text-center">Tech Stack</h2>
                 <div class="flex flex-wrap justify-center gap-4">
                     
-                    <!-- Laravel -->
                     <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-red-500 transition">
                         <span class="text-red-500 font-bold text-sm">Laravel 13</span>
                     </div>
                     
-                    <!-- PHP -->
                     <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-indigo-500 transition">
                         <span class="text-indigo-400 font-bold text-sm">PHP 8.3</span>
                     </div>
                     
-                    <!-- Tailwind -->
                     <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-cyan-400 transition">
                         <span class="text-cyan-400 font-bold text-sm">Tailwind CSS</span>
                     </div>
                     
-                    <!-- MySQL -->
                     <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-blue-400 transition">
                         <span class="text-blue-400 font-bold text-sm">MySQL</span>
                     </div>
                     
-                    <!-- Intervention Image -->
                     <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-emerald-400 transition">
                         <span class="text-emerald-400 font-bold text-sm">Intervention Image</span>
                     </div>
                     
-                    <!-- SweetAlert2 -->
                     <div class="flex items-center gap-2 px-4 py-2 bg-gray-700/70 rounded-full border border-gray-600 hover:border-orange-400 transition">
                         <span class="text-orange-400 font-bold text-sm">SweetAlert2</span>
                     </div>
@@ -294,7 +266,6 @@
         </div>
     </main>
 
-    <!--  FOOTER -->
     <footer class="bg-gray-900 border-t border-gray-800 py-8 mt-auto">
         <div class="max-w-6xl mx-auto px-4 text-center">
             <div class="flex justify-center items-center gap-2 mb-4">
@@ -316,9 +287,7 @@
         </div>
     </footer>
 
-    <!-- ⚙️ SCRIPTS -->
     <script>
-        // Mobile Menu Toggle
         const mobileMenu = document.getElementById('mobileMenu');
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebarClose = document.getElementById('sidebarClose');
@@ -342,7 +311,6 @@
             }
         });
 
-        // SweetAlert for success message
         @if (session('success'))
             Swal.fire({
                 icon: 'success',
@@ -362,22 +330,18 @@
             id="floatingReportBtn"
             class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group flex items-center gap-2 px-3 py-2.5 sm:px-5 sm:py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium rounded-full shadow-2xl hover:shadow-emerald-500/50 transition-all duration-300 hover:scale-105 active:scale-95">
         
-        <!-- Pulse Ring -->
         <span class="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-20"></span>
         
-        <!-- Icon Only on Mobile -->
         <svg class="w-5 h-5 sm:w-5 sm:h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
         </svg>
         
-        <!-- Text Only on Desktop -->
         <span class="relative z-10 text-xs sm:text-sm hidden sm:inline">Kirim Masukan</span>
     </button>
 
     <div id="reportModal" class="fixed inset-0 z-[100] hidden items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-0 sm:p-4 transition-opacity">
         <div class="bg-gray-800 rounded-t-2xl sm:rounded-2xl border-t sm:border border-gray-700 w-full sm:max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all">
             
-            <!-- Modal Header (Sticky di Mobile) -->
             <div class="sticky top-0 bg-gray-800 border-b border-gray-700 p-4 sm:p-6 flex justify-between items-start z-10">
                 <div class="flex items-start gap-3">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-900/40 flex items-center justify-center flex-shrink-0">
@@ -397,17 +361,14 @@
                 </button>
             </div>
             
-            <!-- Modal Body -->
             <form id="reportForm" action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data" class="p-4 sm:p-6 space-y-4 sm:space-y-5">
                 @csrf
                 
-                <!-- Category Selection (Stack di Mobile Sangat Kecil) -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-3">
                         Kategori Laporan <span class="text-red-400">*</span>
                     </label>
                     <div class="grid grid-cols-2 gap-2 sm:gap-3">
-                        <!-- Saran -->
                         <label class="cursor-pointer">
                             <input type="radio" name="category" value="saran" checked class="peer sr-only">
                             <div class="p-3 sm:p-4 bg-gray-700 border-2 border-gray-600 rounded-xl peer-checked:border-emerald-500 peer-checked:bg-emerald-900/20 transition hover:border-gray-500">
@@ -425,7 +386,6 @@
                             </div>
                         </label>
                         
-                        <!-- Bug -->
                         <label class="cursor-pointer">
                             <input type="radio" name="category" value="bug" class="peer sr-only">
                             <div class="p-3 sm:p-4 bg-gray-700 border-2 border-gray-600 rounded-xl peer-checked:border-red-500 peer-checked:bg-red-900/20 transition hover:border-gray-500">
@@ -445,7 +405,6 @@
                     </div>
                 </div>
                 
-                <!-- Title -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         Judul Singkat <span class="text-red-400">*</span>
@@ -456,7 +415,6 @@
                     @error('title') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 
-                <!-- Description -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         Deskripsi Lengkap <span class="text-red-400">*</span>
@@ -467,7 +425,6 @@
                     @error('description') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 
-                <!-- Image Upload -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         Gambar Pendukung <span class="text-gray-500 text-xs">(Opsional, max 2MB)</span>
@@ -475,7 +432,6 @@
                     <div id="imageUploadZone" class="border-2 border-dashed border-gray-600 rounded-xl p-4 sm:p-6 text-center cursor-pointer hover:border-emerald-500/50 transition"
                         onclick="document.getElementById('reportImage').click()">
                         
-                        <!-- Default State -->
                         <div id="imageDefault">
                             <svg class="w-8 h-8 sm:w-10 sm:h-10 mx-auto text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -484,7 +440,6 @@
                             <p class="text-gray-500 text-xs mt-1 hidden sm:block">PNG, JPG, WEBP (Max 2MB)</p>
                         </div>
                         
-                        <!-- Preview State -->
                         <div id="imagePreview" class="hidden">
                             <img id="previewImg" class="max-h-32 sm:max-h-48 mx-auto rounded-lg mb-2 object-contain" src="" alt="Preview" loading="lazy">
                             <p id="previewFileName" class="text-gray-300 text-xs sm:text-sm font-medium truncate"></p>
@@ -499,7 +454,6 @@
                     @error('image') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 
-                <!-- Reporter Info -->
                 <div class="grid grid-cols-1 gap-3 sm:gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">
@@ -532,7 +486,6 @@
                 </div>
                 @endauth
                 
-                <!-- Actions (Full Width di Mobile) -->
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
                     <button type="button" onclick="closeReportModal()" 
                             class="w-full sm:flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition">
@@ -551,7 +504,6 @@
     </div>
 
     <script>
-        // Open/Close Modal
         function openReportModal() {
             const modal = document.getElementById('reportModal');
             modal.classList.remove('hidden');
@@ -568,12 +520,10 @@
             removeImage();
         }
         
-        // Image Preview
         function previewImage(input) {
             const file = input.files[0];
             if (!file) return;
             
-            // Validate size
             if (file.size > 2 * 1024 * 1024) {
                 Swal.fire({
                     icon: 'error',
@@ -603,17 +553,14 @@
             document.getElementById('imagePreview').classList.add('hidden');
         }
         
-        // Close modal on backdrop click
         document.getElementById('reportModal')?.addEventListener('click', (e) => {
             if (e.target.id === 'reportModal') closeReportModal();
         });
         
-        // Close modal on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeReportModal();
         });
         
-        // Show success message if exists
         @if (session('success'))
             Swal.fire({
                 icon: 'success',

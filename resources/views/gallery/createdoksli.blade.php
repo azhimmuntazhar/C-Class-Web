@@ -6,39 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Upload Gallery - Informatika CFI</title>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* Global Scrollbar*/
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(31, 41, 55, 0.4); /* Match bg-gray-800/900 */
+            background: rgba(31, 41, 55, 0.4);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(75, 85, 99, 0.8); /* gray-600 + opacity */
+            background: rgba(75, 85, 99, 0.8);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(107, 114, 128, 1); /* gray-500 */
+            background: rgba(107, 114, 128, 1);
         }
 
-        /*  Firefox Support (Optional tapi disarankan) */
         html {
             scrollbar-width: thin;
             scrollbar-color: rgba(75, 85, 99, 0.8) rgba(31, 41, 55, 0.4);
         }
 
-        /* Smooth scroll & navbar padding (tetap pertahankan) */
         html { scroll-behavior: smooth; }
         body { padding-top: 72px; }
 
-        /* Animasi Underline (tetap pertahankan) */
         .nav-underline { position: relative; display: inline-block; }
         .nav-underline::after {
             content: ''; position: absolute; left: 0; bottom: -3px; width: 100%; height: 4px;
@@ -51,7 +45,6 @@
 <body class="bg-gray-700">
 
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
         <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-50">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8">
@@ -75,7 +68,6 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="flex-1 flex flex-col">
             <header class="bg-white shadow-sm p-4 flex items-center justify-between md:hidden">
                 <button id="sidebarToggle" class="text-gray-800 focus:outline-none">
@@ -92,11 +84,9 @@
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                    <!-- Form Upload -->
                     <form action="{{ route('gallery.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
-                        <!-- Judul -->
                         <div class="mb-5">
                             <label class="block text-gray-700 font-medium mb-2">Judul Gambar</label>
                             <input type="text" name="title" value="{{ old('title') }}"
@@ -108,7 +98,6 @@
                             @enderror
                         </div>
 
-                        <!-- Upload Gambar -->
                         <div class="mb-6">
                             <label class="block text-gray-700 font-medium mb-2">Pilih Gambar</label>
                             <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-emerald-500 transition cursor-pointer" id="dropZone">
@@ -121,7 +110,6 @@
                                     <p class="text-xs text-gray-400">PNG, JPG, GIF • Maksimal 2MB</p>
                                 </label>
                             </div>
-                            <!-- Preview -->
                             <div id="previewContainer" class="mt-4 hidden">
                                 <img id="imagePreview" class="w-32 h-32 object-cover rounded-lg border border-gray-200 mx-auto" loading="lazy">
                             </div>
@@ -130,7 +118,6 @@
                             @enderror
                         </div>
 
-                        <!-- Tombol -->
                         <div class="flex gap-3">
                             <a href="{{ route('gallery.doksli') }}"
                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition text-center">
@@ -147,9 +134,7 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // Preview gambar sebelum upload
         const imageInput = document.getElementById('imageInput');
         const previewContainer = document.getElementById('previewContainer');
         const imagePreview = document.getElementById('imagePreview');
@@ -166,7 +151,6 @@
             }
         });
 
-        // SweetAlert for validation errors
         @if ($errors->any())
             Swal.fire({
                 icon: 'error',
@@ -176,7 +160,6 @@
             });
         @endif
 
-        // Sidebar Toggle Script (sama seperti view lain)
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebarClose = document.getElementById('sidebarClose');

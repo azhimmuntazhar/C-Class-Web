@@ -19,8 +19,7 @@
 
 @php
     $currentUser = auth()->user();
-    
-    // Helper: Cek apakah boleh edit
+
     $canEdit = function($targetUser) use ($currentUser) {
         if ($targetUser->id === $currentUser->id) return false;
         if ($currentUser->role === 'admin') {
@@ -31,8 +30,7 @@
         }
         return false;
     };
-    
-    // Helper: Cek apakah boleh hapus
+
     $canDelete = function($targetUser) use ($currentUser) {
         if ($targetUser->id === $currentUser->id) return false;
         if ($currentUser->role === 'admin') {
@@ -43,8 +41,7 @@
         }
         return false;
     };
-    
-    // Helper: Get roles yang bisa di-assign
+
     $getAssignableRoles = function() use ($currentUser) {
         $allRoles = config('roles.list', []);
         if ($currentUser->role === 'admin') {
@@ -59,8 +56,6 @@
 
 @section('content')
 <div class="p-4 md:p-8">
-    
-    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
             <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
@@ -89,7 +84,6 @@
         </button>
     </div>
 
-    <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
             <p class="text-gray-400 text-xs uppercase">Total User</p>
@@ -107,7 +101,6 @@
         </div>
     </div>
 
-    <!-- Search & Filter -->
     <div class="flex flex-wrap items-center gap-4 mb-6 bg-gray-700/60 p-4 rounded-xl border border-gray-600">
         <div class="relative flex-1 min-w-[200px]">
             <input type="text" id="searchInput" placeholder="Cari nama atau email..." 
@@ -133,7 +126,6 @@
         </button>
     </div>
 
-    <!-- User Table -->
     <div class="bg-gray-700/60 rounded-xl border border-gray-600 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
@@ -184,7 +176,6 @@
                         </td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-1">
-                                <!-- Edit Button -->
                                 @if($canEdit($user))
                                 <button onclick="openEditRoleModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->role }}')" 
                                         class="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/20 rounded-lg transition" 
@@ -201,8 +192,7 @@
                                     </svg>
                                 </span>
                                 @endif
-                                
-                                <!-- Delete Button -->
+
                                 @if($canDelete($user))
                                 <button onclick="confirmDelete({{ $user->id }}, '{{ addslashes($user->name) }}')" 
                                         class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-900/20 rounded-lg transition" 
@@ -247,7 +237,6 @@
     </div>
 </div>
 
-<!-- ➕ ADD USER MODAL -->
 <div id="addUserModal" class="modal fixed inset-0 z-[80] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
     <div class="bg-gray-800 rounded-2xl border border-gray-700 w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div class="p-6">
@@ -313,7 +302,6 @@
     </div>
 </div>
 
-<!-- ✏️ EDIT ROLE MODAL -->
 <div id="editRoleModal" class="modal fixed inset-0 z-[80] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
     <div class="bg-gray-800 rounded-2xl border border-gray-700 w-full max-w-md">
         <div class="p-6">
@@ -366,7 +354,6 @@
 
 @push('scripts')
 <script>
-    // Modal Functions
     function openAddUserModal() {
         document.getElementById('addUserModal').classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
@@ -415,8 +402,7 @@
             }
         });
     }
-    
-    // Search & Filter
+
     const searchInput = document.getElementById('searchInput');
     const filterRole = document.getElementById('filterRole');
     const userRows = document.querySelectorAll('#userTableBody tr[data-role]');
@@ -445,8 +431,7 @@
     
     searchInput?.addEventListener('input', filterUsers);
     filterRole?.addEventListener('change', filterUsers);
-    
-    // Close modal on backdrop click
+
     document.querySelectorAll('.modal').forEach(modal => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -455,8 +440,7 @@
             }
         });
     });
-    
-    // Close modal on Escape key
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeAddUserModal();

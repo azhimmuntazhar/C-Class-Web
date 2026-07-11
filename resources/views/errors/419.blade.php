@@ -38,8 +38,6 @@
 
     <main class="relative z-10 w-full max-w-2xl">
         <div class="bg-gray-800/60 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 md:p-12 shadow-2xl text-center">
-            
-            <!-- Animated Icon -->
             <div class="relative inline-block mb-8 animate-float">
                 <div class="relative w-28 h-28 bg-gradient-to-br from-yellow-900/40 to-orange-800/20 rounded-full border border-yellow-700/50 flex items-center justify-center backdrop-blur-sm">
                     <svg class="w-16 h-16 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,7 +63,6 @@
                 Halaman yang kamu minta telah kedaluwarsa karena alasan keamanan. Silakan refresh halaman dan coba lagi.
             </p>
 
-            <!-- Info Box -->
             <div class="bg-yellow-900/20 border border-yellow-700/50 rounded-2xl p-5 mb-8 text-left">
                 <div class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,7 +75,6 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <button onclick="window.location.reload()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-xl transition shadow-lg hover:shadow-yellow-500/20">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>

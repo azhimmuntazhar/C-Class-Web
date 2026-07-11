@@ -305,14 +305,12 @@
                         @foreach($announcements as $announcement)
                         <div class="bg-gradient-to-r from-orange-900/30 to-gray-800/60 rounded-xl border border-orange-700/30 p-5 hover:border-orange-600/50 transition group">
                             <div class="flex items-start gap-4">
-                                <!-- Icon -->
                                 <div class="w-10 h-10 rounded-lg bg-orange-600/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
                                     <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
                                     </svg>
                                 </div>
                                 
-                                <!-- Content -->
                                 <div class="flex-1 min-w-0">
                                     <div class="flex flex-wrap items-center gap-2 mb-2">
                                         <h3 class="text-white font-semibold text-lg">{{ $announcement->title }}</h3>

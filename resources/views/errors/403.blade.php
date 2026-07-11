@@ -45,8 +45,6 @@
 
     <main class="relative z-10 w-full max-w-2xl">
         <div class="bg-gray-800/60 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 md:p-12 shadow-2xl text-center">
-            
-            <!-- Animated Icon -->
             <div class="relative inline-block mb-8 animate-float">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="w-28 h-28 rounded-full border-2 border-orange-500/30 pulse-ring"></div>
@@ -76,7 +74,6 @@
                 Maaf, kamu tidak memiliki izin untuk mengakses halaman ini. Silakan hubungi administrator jika kamu merasa ini adalah kesalahan.
             </p>
 
-            <!-- Info Box -->
             <div class="bg-orange-900/20 border border-orange-700/50 rounded-2xl p-5 mb-8 text-left">
                 <h3 class="text-white font-semibold mb-3 flex items-center gap-2">
                     <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -98,7 +95,6 @@
                 </ul>
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="{{ url()->previous() }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-xl transition border border-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>

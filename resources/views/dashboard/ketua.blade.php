@@ -4,8 +4,6 @@
 
 @section('content')
 <div class="p-4 md:p-8">
-    
-    <!-- Header -->
     <div class="mb-8">
         <h1 class="text-2xl md:text-3xl font-bold text-white">Dashboard Ketua</h1>
         <p class="text-gray-400 mt-1">
@@ -13,7 +11,6 @@
         </p>
     </div>
 
-    <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div class="bg-gray-700/60 p-5 rounded-xl border border-gray-600">
             <div class="flex items-center justify-between">
@@ -66,7 +63,6 @@
         </div>
     </div>
 
-    <!-- Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <h2 class="text-xl font-bold text-white">Daftar Tugas</h2>
         <a href="{{ route('tasks.create') }}" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition shadow-md hover:shadow-lg active:scale-95">
@@ -75,13 +71,11 @@
         </a>
     </div>
 
-    <!-- Task List -->
     <div class="bg-gray-700/60 rounded-xl border border-gray-600 overflow-hidden">
         @forelse($tasks as $task)
         <div class="p-4 border-b border-gray-600 last:border-0 hover:bg-gray-700/80 transition group">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 
-                <!-- Task Info -->
                 <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-2 mb-1">
                         <h3 class="text-white font-medium truncate group-hover:text-emerald-400 transition">{{ $task->title }}</h3>
@@ -104,7 +98,6 @@
                     </div>
                 </div>
                 
-                <!-- Actions -->
                 <div class="flex items-center gap-2">
                     <button onclick="if(confirm('Hapus tugas ini?')) document.getElementById('delete-form-{{ $task->id }}').submit()" 
                             class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-900/20 rounded-lg transition">
@@ -125,7 +118,6 @@
         @endforelse
     </div>
     
-    <!-- Pagination -->
     @if($tasks->hasPages())
     <div class="mt-6">
         {{ $tasks->links() }}

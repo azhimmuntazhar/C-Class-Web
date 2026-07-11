@@ -44,21 +44,17 @@
 
     <main class="relative z-10 w-full max-w-2xl">
         <div class="bg-gray-800/60 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 md:p-12 shadow-2xl text-center">
-            
-            <!-- Animated Icon -->
             <div class="relative inline-block mb-8 animate-float">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="w-28 h-28 rounded-full border-2 border-purple-500/30 pulse-ring"></div>
                 </div>
                 
                 <div class="relative w-28 h-28 bg-gradient-to-br from-purple-900/40 to-pink-800/20 rounded-full border border-purple-700/50 flex items-center justify-center backdrop-blur-sm">
-                    <!-- Circular Progress -->
                     <svg class="absolute w-full h-full -rotate-90" viewBox="0 0 100 100">
                         <circle cx="50" cy="50" r="45" stroke="rgba(168, 85, 247, 0.2)" stroke-width="4" fill="none"></circle>
                         <circle class="animate-countdown" cx="50" cy="50" r="45" stroke="#a855f7" stroke-width="4" fill="none" stroke-linecap="round"></circle>
                     </svg>
                     
-                    <!-- Speed Icon -->
                     <svg class="w-12 h-12 text-purple-400 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                     </svg>
@@ -80,7 +76,6 @@
                 Kamu telah melakukan terlalu banyak permintaan dalam waktu singkat. Silakan tunggu beberapa saat sebelum mencoba lagi.
             </p>
 
-            <!-- Countdown Info -->
             <div class="bg-purple-900/20 border border-purple-700/50 rounded-2xl p-5 mb-8">
                 <div class="flex items-center justify-center gap-3">
                     <div class="relative flex h-3 w-3">
@@ -91,7 +86,6 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <button onclick="setTimeout(() => window.location.reload(), 5000)" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition shadow-lg hover:shadow-purple-500/20">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

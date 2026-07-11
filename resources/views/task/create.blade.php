@@ -4,7 +4,6 @@
 
 @push('styles')
 <style>
-    /* Form Animations */
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -19,12 +18,10 @@
     .form-section:nth-child(4) { animation-delay: 0.4s; }
     .form-section:nth-child(5) { animation-delay: 0.5s; }
     
-    /* Input Focus Effect */
     input:focus, select:focus, textarea:focus {
         box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
     }
     
-    /* Character Counter */
     .char-counter {
         transition: color 0.2s;
     }
@@ -36,7 +33,6 @@
 @section('content')
 <div class="p-4 md:p-8">
     
-    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 form-section">
         <div>
             <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
@@ -65,7 +61,6 @@
         </a>
     </div>
 
-    <!-- Info Banner (Untuk Ketua) -->
     @if(!in_array(auth()->user()->role, ['admin', 'manager']))
     <div class="form-section bg-emerald-900/20 border border-emerald-700/50 rounded-xl p-4 mb-6 flex items-start gap-3">
         <svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,11 +75,9 @@
     </div>
     @endif
 
-    <!-- Form -->
     <form action="{{ route('tasks.store') }}" method="POST" id="taskForm" class="space-y-6">
         @csrf
 
-        <!-- Section 1: Mata Kuliah -->
         <div class="form-section bg-gray-700/60 rounded-xl border border-gray-600 p-6">
             <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +87,6 @@
             </h2>
             
             @if(in_array(auth()->user()->role, ['admin', 'manager']))
-                <!-- Admin/Manager: Dropdown untuk pilih course -->
                 <select name="course_key" required 
                         class="w-full px-4 py-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
                     <option value="">Pilih mata kuliah...</option>
@@ -104,7 +96,6 @@
                 </select>
                 <p class="text-xs text-gray-500 mt-2">Pilih mata kuliah yang akan menerima tugas ini</p>
             @else
-                <!-- Ketua: Auto-filled, tidak bisa diubah -->
                 @php $courseKey = config("roles.course_mapping." . auth()->user()->role); @endphp
                 <input type="hidden" name="course_key" value="{{ $courseKey }}">
                 
@@ -129,7 +120,7 @@
             @enderror
         </div>
 
-        <!-- Section 2: Informasi Dasar -->
+        <div class="form-section bg-gray-700/60 rounded-xl border border-gray-600 p-6">
         <div class="form-section bg-gray-700/60 rounded-xl border border-gray-600 p-6">
             <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +130,6 @@
             </h2>
             
             <div class="space-y-4">
-                <!-- Judul -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         Judul Tugas <span class="text-red-400">*</span>
@@ -159,7 +149,6 @@
                     @enderror
                 </div>
                 
-                <!-- Kategori -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         Kategori <span class="text-red-400">*</span>
@@ -209,7 +198,6 @@
             </div>
         </div>
 
-        <!-- Section 3: Deskripsi -->
         <div class="form-section bg-gray-700/60 rounded-xl border border-gray-600 p-6">
             <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,7 +222,6 @@
             </div>
         </div>
 
-        <!-- Section 4: Link (Opsional) -->
         <div class="form-section bg-gray-700/60 rounded-xl border border-gray-600 p-6">
             <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,7 +232,6 @@
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Link Materi -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         <span class="flex items-center gap-2">
@@ -267,7 +253,6 @@
                     @enderror
                 </div>
                 
-                <!-- Link Pengumpulan -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         <span class="flex items-center gap-2">
@@ -291,7 +276,7 @@
             </div>
         </div>
 
-        <!-- Section 5: Timeline -->
+        <div class="form-section bg-gray-700/60 rounded-xl border border-gray-600 p-6">
         <div class="form-section bg-gray-700/60 rounded-xl border border-gray-600 p-6">
             <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -301,7 +286,6 @@
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Mulai -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         <span class="flex items-center gap-2">
@@ -322,7 +306,6 @@
                     @enderror
                 </div>
                 
-                <!-- Deadline -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         <span class="flex items-center gap-2">
@@ -344,7 +327,6 @@
                 </div>
             </div>
             
-            <!-- Timeline Preview -->
             <div id="timelinePreview" class="mt-4 p-3 bg-gray-800/50 rounded-lg border border-gray-600 hidden">
                 <p class="text-xs text-gray-400 mb-2">Preview Timeline:</p>
                 <div class="flex items-center gap-2 text-sm">
@@ -358,7 +340,6 @@
             </div>
         </div>
 
-        <!-- Action Buttons -->
         <div class="form-section flex flex-col sm:flex-row gap-3 pt-4">
             <a href="{{ route('tasks.index') }}" 
                class="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition text-center border border-gray-600">
@@ -377,7 +358,6 @@
 
 @push('scripts')
 <script>
-    // Character counter for title
     const titleInput = document.querySelector('input[name="title"]');
     const titleCount = document.getElementById('titleCount');
     const charCounter = document.querySelector('.char-counter');
@@ -394,7 +374,6 @@
         }
     });
     
-    // Timeline preview
     const startsInput = document.querySelector('input[name="starts_at"]');
     const deadlineInput = document.querySelector('input[name="deadline_at"]');
     const timelinePreview = document.getElementById('timelinePreview');
@@ -418,7 +397,6 @@
                     hour: '2-digit', minute: '2-digit' 
                 });
                 
-                // Calculate duration
                 const diffMs = end - start;
                 const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
                 const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -440,7 +418,6 @@
     startsInput?.addEventListener('change', updateTimelinePreview);
     deadlineInput?.addEventListener('change', updateTimelinePreview);
     
-    // Form validation before submit
     document.getElementById('taskForm')?.addEventListener('submit', function(e) {
         const starts = new Date(startsInput.value);
         const deadline = new Date(deadlineInput.value);

@@ -4,7 +4,6 @@
 
 @push('styles')
 <style>
-    /* Card Hover Effect */
     .stat-card {
         transition: all 0.3s ease;
     }
@@ -12,8 +11,6 @@
         transform: translateY(-4px);
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
     }
-    
-    /* Staggered Animation */
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -29,7 +26,6 @@
     .delay-5 { animation-delay: 0.5s; }
     .delay-6 { animation-delay: 0.6s; }
     
-    /* Photo Hover Zoom */
     .photo-card:hover .photo-img {
         transform: scale(1.1);
     }
@@ -37,12 +33,10 @@
         transition: transform 0.4s ease;
     }
     
-    /* Deadline Progress Bar */
     .deadline-progress {
         transition: width 0.5s ease;
     }
     
-    /* Pulse Animation for Urgent */
     @keyframes urgent-pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.6; }
@@ -55,8 +49,6 @@
 
 @section('content')
 <div class="p-4 md:p-8">
-    
-    <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 animate-fade-in">
         <div>
             <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
@@ -88,10 +80,7 @@
         </div>
     </div>
 
-    <!-- Stats Overview Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        
-        <!-- Total Tugas -->
         <div class="stat-card bg-gray-700/60 p-5 rounded-xl border border-gray-600 animate-fade-in delay-1">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-10 h-10 rounded-lg bg-blue-900/40 flex items-center justify-center">
@@ -104,8 +93,6 @@
             <p class="text-3xl font-bold text-white">{{ $totalTasks }}</p>
             <p class="text-xs text-gray-400 mt-1">Total Tugas</p>
         </div>
-        
-        <!-- Tugas Aktif -->
         <div class="stat-card bg-gray-700/60 p-5 rounded-xl border border-gray-600 animate-fade-in delay-2">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-10 h-10 rounded-lg bg-emerald-900/40 flex items-center justify-center">
@@ -120,8 +107,6 @@
             <p class="text-3xl font-bold text-emerald-400">{{ $activeTasks }}</p>
             <p class="text-xs text-gray-400 mt-1">Tugas Aktif</p>
         </div>
-        
-        <!-- Tugas Terlewat -->
         <div class="stat-card bg-gray-700/60 p-5 rounded-xl border border-gray-600 animate-fade-in delay-3">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-10 h-10 rounded-lg bg-red-900/40 flex items-center justify-center">
@@ -136,8 +121,6 @@
             <p class="text-3xl font-bold text-red-400">{{ $expiredTasks }}</p>
             <p class="text-xs text-gray-400 mt-1">Tugas Terlewat</p>
         </div>
-        
-        <!-- Jumlah Ketua -->
         <div class="stat-card bg-gray-700/60 p-5 rounded-xl border border-gray-600 animate-fade-in delay-4">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-10 h-10 rounded-lg bg-purple-900/40 flex items-center justify-center">
@@ -152,9 +135,7 @@
         </div>
     </div>
 
-    <!-- Mendekati Deadline (FULL WIDTH) -->
     <div class="bg-gray-700/60 rounded-xl border border-gray-600 overflow-hidden mb-8 animate-fade-in delay-3">
-        <!-- Header -->
         <div class="flex items-center justify-between p-5 border-b border-gray-600">
             <h2 class="text-lg font-bold text-white flex items-center gap-2">
                 <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +150,6 @@
             </a>
         </div>
         
-        <!-- Content -->
         <div class="divide-y divide-gray-600">
             @forelse($upcomingDeadlines as $task)
             @php
@@ -203,7 +183,6 @@
                         </div>
                     </div>
                     
-                    <!-- Countdown -->
                     <div class="text-right flex-shrink-0">
                         <div class="text-sm font-bold {{ $isCritical ? 'text-red-500' : ($isUrgent ? 'text-orange-400' : 'text-blue-400') }}">
                             @if($isCritical)
@@ -222,7 +201,6 @@
                     </div>
                 </div>
                 
-                <!-- Progress Bar -->
                 @php
                     $totalDuration = $task->starts_at->diffInHours($task->deadline_at);
                     $elapsed = $task->starts_at->diffInHours(now());
@@ -244,9 +222,7 @@
         </div>
     </div>
 
-    <!-- Tugas Terbaru -->
     <div class="bg-gray-700/60 rounded-xl border border-gray-600 overflow-hidden mb-8 animate-fade-in delay-4">
-        <!-- Header -->
         <div class="flex items-center justify-between p-5 border-b border-gray-600">
             <h2 class="text-lg font-bold text-white flex items-center gap-2">
                 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,7 +237,6 @@
             </a>
         </div>
         
-        <!-- Task Table -->
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead class="bg-gray-800/80 text-gray-400 uppercase text-xs">
@@ -322,10 +297,8 @@
         </div>
     </div>
 
-    <!-- Quick Info Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate-fade-in delay-5">
-        
-        <!-- Completion Rate -->
+
         <div class="bg-gradient-to-br from-emerald-900/40 to-gray-800 p-5 rounded-xl border border-emerald-700/30">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-white font-semibold">Tingkat Penyelesaian</h3>
@@ -345,8 +318,6 @@
                      style="width: {{ $completionRate }}%"></div>
             </div>
         </div>
-        
-        <!-- Active Divisions -->
         <div class="bg-gradient-to-br from-purple-900/40 to-gray-800 p-5 rounded-xl border border-purple-700/30">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-white font-semibold">Divisi Aktif</h3>
@@ -362,8 +333,6 @@
                 {{ count(config('roles.courses')) }} mata kuliah terdaftar
             </p>
         </div>
-        
-        <!-- Gallery Stats -->
         <div class="bg-gradient-to-br from-blue-900/40 to-gray-800 p-5 rounded-xl border border-blue-700/30">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-white font-semibold">Gallery</h3>
@@ -381,9 +350,7 @@
         </div>
     </div>
 
-    <!-- ✅ FOTO TERBARU (DIPINDAH KE PALING BAWAH) -->
     <div class="bg-gray-700/60 rounded-xl border border-gray-600 overflow-hidden animate-fade-in delay-6">
-        <!-- Header -->
         <div class="flex items-center justify-between p-5 border-b border-gray-600">
             <h2 class="text-lg font-bold text-white flex items-center gap-2">
                 <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -398,7 +365,6 @@
             </a>
         </div>
         
-        <!-- Photo Grid -->
         <div class="p-5">
             @if($latestPhotos->count() > 0)
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
@@ -409,13 +375,10 @@
                              alt="{{ $photo->title }}"
                              loading="lazy"
                              class="photo-img w-full h-full object-cover">
-                        
-                        <!-- Overlay -->
+
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
                             <p class="text-white text-xs font-medium truncate w-full">{{ $photo->title }}</p>
                         </div>
-                        
-                        <!-- Date Badge -->
                         <span class="absolute top-2 right-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-md backdrop-blur-sm">
                             {{ $photo->created_at->format('d M') }}
                         </span>

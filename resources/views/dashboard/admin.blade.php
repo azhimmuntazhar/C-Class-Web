@@ -4,14 +4,11 @@
 
 @section('content')
 <div class="p-4 md:p-8">
-    
-    <!-- Header -->
     <div class="mb-8">
         <h1 class="text-2xl md:text-3xl font-bold text-white">Admin Dashboard</h1>
         <p class="text-gray-400 mt-1">Kelola sistem, user, dan monitoring global</p>
     </div>
 
-    <!-- Global Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div class="bg-gray-700/60 p-5 rounded-xl border border-gray-600">
             <div class="flex items-center justify-between">
@@ -62,11 +59,9 @@
         </div>
     </div>
 
-    <!-- Quick Actions Grid -->
     <h2 class="text-xl font-bold text-white mb-4">Quick Actions</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         
-        <!-- Manage Users -->
         <a href="{{ route('dashboard.users') }}" class="group bg-gray-700/60 p-5 rounded-xl border border-gray-600 hover:border-emerald-500/50 hover:bg-gray-700 transition">
             <div class="flex items-start gap-4">
                 <div class="w-12 h-12 rounded-lg bg-purple-900/40 flex items-center justify-center flex-shrink-0">
@@ -79,7 +74,6 @@
             </div>
         </a>
         
-        <!-- All Tasks -->
         <a href="{{ route('tasks.index') }}" class="group bg-gray-700/60 p-5 rounded-xl border border-gray-600 hover:border-emerald-500/50 hover:bg-gray-700 transition">
             <div class="flex items-start gap-4">
                 <div class="w-12 h-12 rounded-lg bg-emerald-900/40 flex items-center justify-center flex-shrink-0">
@@ -92,7 +86,6 @@
             </div>
         </a>
         
-        <!-- Gallery Management -->
         <a href="{{ route('gallery.doksli') }}" class="group bg-gray-700/60 p-5 rounded-xl border border-gray-600 hover:border-emerald-500/50 hover:bg-gray-700 transition">
             <div class="flex items-start gap-4">
                 <div class="w-12 h-12 rounded-lg bg-blue-900/40 flex items-center justify-center flex-shrink-0">
@@ -106,7 +99,6 @@
         </a>
     </div>
 
-    <!-- Recent Users Table -->
     <h2 class="text-xl font-bold text-white mb-4">User Terbaru</h2>
     <div class="bg-gray-700/60 rounded-xl border border-gray-600 overflow-hidden">
         <div class="overflow-x-auto">

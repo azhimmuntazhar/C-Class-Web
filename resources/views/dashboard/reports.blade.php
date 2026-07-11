@@ -24,8 +24,6 @@
 
 @section('content')
 <div class="p-4 md:p-8">
-    
-    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 animate-fade-in">
         <div>
             <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
@@ -40,7 +38,6 @@
         </div>
     </div>
 
-    <!-- Stats Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8 animate-fade-in">
         <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
             <p class="text-gray-400 text-xs uppercase">Total</p>
@@ -68,7 +65,6 @@
         </div>
     </div>
 
-    <!-- Filters -->
     <form method="GET" action="{{ route('dashboard.reports') }}" class="flex flex-wrap gap-3 mb-6 bg-gray-700/60 p-4 rounded-xl border border-gray-600 animate-fade-in">
         <div class="relative flex-1 min-w-[200px]">
             <input type="text" name="search" value="{{ $search }}" placeholder="Cari judul atau deskripsi..." 
@@ -100,14 +96,12 @@
         </a>
     </form>
 
-    <!-- Reports List -->
     @if($reports->count() > 0)
         <div class="space-y-4">
             @foreach($reports as $report)
             <div class="report-card bg-gray-700/60 rounded-xl border border-gray-600 p-5 animate-fade-in">
                 <div class="flex flex-col md:flex-row gap-4">
                     
-                    <!-- Image (if exists) -->
                     @if($report->image)
                     <div class="md:w-48 flex-shrink-0">
                         <img src="{{ asset('storage/' . $report->image) }}" 
@@ -118,12 +112,9 @@
                     </div>
                     @endif
                     
-                    <!-- Content -->
                     <div class="flex-1 min-w-0">
-                        <!-- Header -->
                         <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
                             <div class="flex flex-wrap items-center gap-2">
-                                <!-- Category Badge -->
                                 @if($report->isSaran())
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/40 text-purple-300 text-xs font-medium rounded-md border border-purple-700/50">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,7 +131,6 @@
                                     </span>
                                 @endif
                                 
-                                <!-- Status Badge -->
                                 @php
                                     $statusColors = [
                                         'baru' => 'bg-blue-900/40 text-blue-300 border-blue-700/50',
@@ -153,19 +143,15 @@
                                 </span>
                             </div>
                             
-                            <!-- Date -->
                             <span class="text-xs text-gray-500">
                                 {{ $report->created_at->diffForHumans() }}
                             </span>
                         </div>
                         
-                        <!-- Title -->
                         <h3 class="text-lg font-semibold text-white mb-2">{{ $report->title }}</h3>
-                        
-                        <!-- Description -->
+
                         <p class="text-gray-400 text-sm mb-3 whitespace-pre-wrap">{{ $report->description }}</p>
-                        
-                        <!-- Reporter Info -->
+
                         <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-3">
                             @if($report->reporter_name)
                             <span class="flex items-center gap-1">
@@ -191,9 +177,7 @@
                             </span>
                         </div>
                         
-                        <!-- Actions -->
                         <div class="flex flex-wrap gap-2">
-                            <!-- Status Update Form -->
                             <form action="{{ route('dashboard.reports.updateStatus', $report) }}" method="POST" class="inline">
                                 @csrf @method('PATCH')
                                 <select name="status" onchange="this.form.submit()" 
@@ -203,8 +187,7 @@
                                     <option value="selesai" {{ $report->status === 'selesai' ? 'selected' : '' }}>🟢 Selesai</option>
                                 </select>
                             </form>
-                            
-                            <!-- Delete Button -->
+
                             <form action="{{ route('dashboard.reports.destroy', $report) }}" method="POST" class="delete-form inline">
                                 @csrf @method('DELETE')
                                 <button type="submit" 
@@ -221,15 +204,13 @@
             </div>
             @endforeach
         </div>
-        
-        <!-- Pagination -->
+
         @if($reports->hasPages())
         <div class="mt-6">
             {{ $reports->withQueryString()->links() }}
         </div>
         @endif
     @else
-        <!-- Empty State -->
         <div class="text-center py-16 bg-gray-700/40 rounded-2xl border border-dashed border-gray-600">
             <svg class="w-20 h-20 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -242,7 +223,6 @@
 
 @push('scripts')
 <script>
-    // Delete confirmation
     document.querySelectorAll('.delete-form').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();

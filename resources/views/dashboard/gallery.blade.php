@@ -69,8 +69,6 @@
 
 @section('content')
 <div class="p-4 md:p-8">
-    
-    <!-- Header -->
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
         <div>
             <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
@@ -106,7 +104,6 @@
         </div>
     </div>
 
-    <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div class="bg-gray-700/60 p-4 rounded-xl border border-gray-600">
             <p class="text-gray-400 text-xs uppercase">Total Gambar</p>
@@ -126,7 +123,6 @@
         </div>
     </div>
 
-    <!-- Gallery Grid -->
     @if($galleries->count() > 0)
         <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             @foreach($galleries as $index => $item)
@@ -135,7 +131,6 @@
                  style="animation-delay: {{ $index * 0.05 }}s"
                  onclick="openLightbox({{ $item->id }}, '{{ asset('storage/' . $item->image) }}', '{{ addslashes($item->title) }}', '{{ $item->created_at->format('d M Y, H:i') }}')">
                 
-                <!-- Image -->
                 <div class="aspect-square overflow-hidden bg-gray-800 relative">
                     <div class="absolute inset-0 skeleton"></div>
                     <img src="{{ asset('storage/' . $item->image) }}" 
@@ -144,7 +139,6 @@
                          class="gallery-img w-full h-full object-cover"
                          onload="this.parentElement.querySelector('.skeleton').style.display='none'">
                     
-                    <!-- Hover Overlay -->
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
                         <p class="text-white font-medium text-sm truncate">{{ $item->title }}</p>
                         <p class="text-gray-300 text-xs">{{ $item->created_at->format('d M Y') }}</p>
@@ -162,13 +156,11 @@
                         </div>
                     </div>
                     
-                    <!-- Badge -->
                     <span class="absolute top-2 right-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-md backdrop-blur-sm">
                         #{{ $loop->iteration }}
                     </span>
                 </div>
                 
-                <!-- Info (Mobile) -->
                 <div class="p-3 md:hidden">
                     <h4 class="font-medium text-white text-sm truncate">{{ $item->title }}</h4>
                     <p class="text-gray-500 text-xs">{{ $item->created_at->format('d M Y') }}</p>
@@ -177,7 +169,6 @@
             @endforeach
         </div>
     @else
-        <!-- Empty State -->
         <div class="text-center py-20 bg-gray-700/40 rounded-2xl border border-dashed border-gray-600">
             <div class="w-24 h-24 mx-auto mb-6 bg-gray-700 rounded-full flex items-center justify-center">
                 <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,7 +188,6 @@
     @endif
 </div>
 
-<!-- 📤 UPLOAD MODAL -->
 <div id="uploadModal" class="fixed inset-0 z-[80] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
     <div class="bg-gray-800 rounded-2xl border border-gray-700 w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div class="p-6">
@@ -216,7 +206,6 @@
             <form id="uploadForm" action="{{ route('gallery.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 
-                <!-- Title -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Judul Gambar</label>
                     <input type="text" name="title" required 
@@ -224,7 +213,6 @@
                            placeholder="Contoh: Dokumentasi Workshop AI 2026">
                 </div>
                 
-                <!-- Upload Zone -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Pilih Gambar</label>
                     <div id="uploadZone" class="upload-zone border-2 border-dashed border-gray-600 rounded-xl p-8 text-center cursor-pointer hover:border-emerald-500/50 transition"
@@ -252,7 +240,6 @@
                     @enderror
                 </div>
                 
-                <!-- Actions -->
                 <div class="flex gap-3 pt-2">
                     <button type="button" onclick="closeUploadModal()" 
                             class="flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition">
@@ -271,24 +258,19 @@
     </div>
 </div>
 
-<!-- 🔦 LIGHTBOX MODAL -->
 <div id="lightbox" class="fixed inset-0 z-[80] hidden flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
-    <!-- Close -->
     <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition z-10">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
     
-    <!-- Image -->
     <div class="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center">
         <img id="lightboxImg" src="" alt="" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl" loading="lazy">
         
-        <!-- Caption -->
         <div class="mt-4 text-center">
             <h3 id="lightboxTitle" class="text-white font-semibold text-lg"></h3>
             <p id="lightboxDate" class="text-gray-400 text-sm mt-1"></p>
         </div>
         
-        <!-- Actions -->
         <div class="flex gap-3 mt-4">
             <a id="lightboxDownload" href="" download 
                class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition flex items-center gap-2">
@@ -298,7 +280,6 @@
         </div>
     </div>
     
-    <!-- Navigation Arrows -->
     <button id="prevBtn" onclick="navigateLightbox(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition hidden md:block">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
     </button>
@@ -322,9 +303,6 @@
     
     let currentLightboxIndex = 0;
     
-    // =====================
-    // UPLOAD MODAL
-    // =====================
     function openUploadModal() {
         document.getElementById('uploadModal').classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
@@ -338,7 +316,6 @@
         document.getElementById('uploadPreview').classList.add('hidden');
     }
     
-    // Image Preview
     const imageInput = document.getElementById('imageInput');
     const uploadZone = document.getElementById('uploadZone');
     
@@ -371,7 +348,6 @@
         reader.readAsDataURL(file);
     }
     
-    // Drag & Drop
     uploadZone?.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadZone.classList.add('drag-over');
@@ -391,9 +367,6 @@
         }
     });
     
-    // =====================
-    // LIGHTBOX
-    // =====================
     function openLightbox(id, src, title, date) {
         currentLightboxIndex = galleryData.findIndex(item => item.id === id);
         
@@ -425,9 +398,6 @@
         document.getElementById('nextBtn').style.display = currentLightboxIndex < galleryData.length - 1 ? 'block' : 'none';
     }
     
-    // =====================
-    // SEARCH
-    // =====================
     const searchInput = document.getElementById('searchGallery');
     const galleryItems = document.querySelectorAll('.gallery-item');
     
@@ -446,9 +416,6 @@
         });
     });
     
-    // =====================
-    // DELETE CONFIRMATION
-    // =====================
     document.querySelectorAll('.delete-form').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -469,9 +436,6 @@
         });
     });
     
-    // =====================
-    // KEYBOARD SHORTCUTS
-    // =====================
     document.addEventListener('keydown', (e) => {
         const lightbox = document.getElementById('lightbox');
         if (!lightbox.classList.contains('hidden')) {

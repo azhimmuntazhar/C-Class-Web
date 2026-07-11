@@ -47,8 +47,6 @@
 
     <main class="relative z-10 w-full max-w-2xl">
         <div class="bg-gray-800/60 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 md:p-12 shadow-2xl text-center">
-            
-            <!-- Animated Icon -->
             <div class="relative inline-block mb-8 animate-float">
                 <div class="relative w-32 h-32 bg-gradient-to-br from-gray-800 to-gray-900 rounded-full border border-gray-700 flex items-center justify-center shadow-inner">
                     <svg class="w-20 h-20 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +54,6 @@
                     </svg>
                 </div>
                 
-                <!-- 404 Badge -->
                 <div class="absolute -top-2 -right-2 px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-full shadow-lg animate-blink">
                     404
                 </div>
@@ -73,7 +70,6 @@
                 Oops! Halaman yang kamu cari mungkin telah dipindahkan, dihapus, atau tidak pernah ada.
             </p>
 
-            <!-- Search Suggestion -->
             <div class="bg-gray-900/80 border border-gray-700 rounded-2xl p-5 mb-8">
                 <p class="text-sm text-gray-400 mb-3">Mungkin kamu sedang mencari:</p>
                 <div class="flex flex-wrap justify-center gap-2">
@@ -83,7 +79,6 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="{{ url()->previous() }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-xl transition border border-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>

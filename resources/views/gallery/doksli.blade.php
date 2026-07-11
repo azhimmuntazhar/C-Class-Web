@@ -6,40 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Gallery - Informatika CFI</title>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* Global Scrollbar*/
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(31, 41, 55, 0.4); /* Match bg-gray-800/900 */
+            background: rgba(31, 41, 55, 0.4);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(75, 85, 99, 0.8); /* gray-600 + opacity */
+            background: rgba(75, 85, 99, 0.8);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(107, 114, 128, 1); /* gray-500 */
+            background: rgba(107, 114, 128, 1);
         }
 
-        /*  Firefox Support (Optional tapi disarankan) */
         html {
             scrollbar-width: thin;
             scrollbar-color: rgba(75, 85, 99, 0.8) rgba(31, 41, 55, 0.4);
         }
 
-        /* Smooth scroll & navbar padding (tetap pertahankan) */
         html { scroll-behavior: smooth; }
         body { padding-top: 72px; }
 
-        /* Animasi Underline (tetap pertahankan) */
         .nav-underline { position: relative; display: inline-block; }
         .nav-underline::after {
             content: ''; position: absolute; left: 0; bottom: -3px; width: 100%; height: 4px;
@@ -52,7 +45,6 @@
 <body class="bg-gray-700">
 
     <div class="flex min-h-screen">
-        <!-- Sidebar (SAMA PERSIS dengan struktur kamu) -->
         <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-50">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8">
@@ -76,9 +68,7 @@
             </div>
         </div>
 
-        <!-- Konten -->
         <div class="max-w-7xl mx-auto py-8 w-full">
-            <!-- Header Section -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
                 <div>
                     <h1 class="text-4xl font-light text-white tracking-tight">Gallery Doksli</h1>
@@ -105,24 +95,20 @@
                 </div>
             @endif
 
-            <!-- Grid Gallery -->
             @if($galleries->count() > 0)
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
                     @foreach($galleries as $item)
                         <div class="group bg-white rounded-xl overflow-hidden border border-gray-100 
                                     hover:border-gray-200 hover:shadow-xl transition-all duration-300
                                     hover:-translate-y-1">
-                            <!-- Gambar -->
                             <div class="aspect-square overflow-hidden bg-gray-50 relative">
                                 <img src="{{ asset('storage/' . $item->image) }}" 
                                     alt="{{ $item->title }}" loading="lazy"
                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                                 
-                                <!-- Overlay saat hover -->
                                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
                             </div>
                             
-                            <!-- Info -->
                             <div class="p-4">
                                 <h4 class="font-medium text-gray-800 truncate text-sm">{{ $item->title }}</h4>
                                 <p class="text-xs text-gray-400 mt-1">
@@ -130,7 +116,6 @@
                                 </p>
                             </div>
 
-                            <!-- Tombol Hapus -->
                             <div class="px-4 pb-4 pt-1">
                                 <form action="{{ route('gallery.destroy', $item->id) }}" 
                                     method="POST" 
@@ -152,7 +137,6 @@
                     @endforeach
                 </div>
             @else
-                <!-- Empty State -->
                 <div class="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                     <div class="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
                         <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,9 +157,7 @@
         </div>
     </div>
 
-    <!-- Scripts (SAMA PERSIS dengan struktur kamu) -->
     <script>
-        // SweetAlert for delete confirmation
         document.querySelectorAll('.delete-form').forEach(form => {
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
@@ -196,7 +178,6 @@
             });
         });
 
-        // SweetAlert for success message
         @if (session('success'))
             Swal.fire({
                 icon: 'success',
@@ -207,7 +188,6 @@
             });
         @endif
 
-        // Sidebar Toggle Script
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebarClose = document.getElementById('sidebarClose');
