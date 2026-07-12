@@ -252,7 +252,28 @@
             transform: scale(1.15) rotate(5deg);
         }
     </style>
-    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Platform manajemen tugas dan dokumentasi untuk mahasiswa Informatika CFI">
+    <meta name="keywords" content="informatika, tugas, kuliah, dokumentasi, cfi">
+    <meta name="author" content="Informatika CFI">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://informatikacfi.my.id/">
+    <meta property="og:title" content="Informatika CFI - Platform Manajemen Tugas">
+    <meta property="og:description" content="Platform manajemen tugas dan dokumentasi untuk mahasiswa Informatika CFI">
+    <meta property="og:image" content="https://informatikacfi.my.id/images/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://informatikacfi.my.id/">
+    <meta property="twitter:title" content="Informatika CFI - Platform Manajemen Tugas">
+    <meta property="twitter:description" content="Platform manajemen tugas dan dokumentasi untuk mahasiswa Informatika CFI">
+    <meta property="twitter:image" content="https://informatikacfi.my.id/images/og-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body class="bg-gray-800">
 
